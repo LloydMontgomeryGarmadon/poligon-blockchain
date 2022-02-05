@@ -55,7 +55,7 @@ class Offer:
 
     @staticmethod
     def notarize_payments(
-        requested_payments: Dict[Optional[bytes32], List[Payment]],  # `None` means you are requesting XCH
+        requested_payments: Dict[Optional[bytes32], List[Payment]],  # `None` means you are requesting BPX
         coins: List[Coin],
     ) -> Dict[Optional[bytes32], List[NotarizedPayment]]:
         # This sort should be reproducible in CLVM with `>s`
@@ -111,7 +111,7 @@ class Offer:
                 filter(lambda cs: cs.coin.name() == addition.parent_coin_info, self.bundle.coin_spends)
             )[0].puzzle_reveal.to_program()
 
-            # Determine it's TAIL (or lack of)
+            # Determine it's limiter (or lack of)
             matched, curried_args = match_cat_puzzle(parent_puzzle)
             tail_hash: Optional[bytes32] = None
             if matched:
@@ -166,7 +166,7 @@ class Offer:
             new_dic: Dict[str, int] = {}
             for key in dic:
                 if key is None:
-                    new_dic["xch"] = dic[key]
+                    new_dic["bpx"] = dic[key]
                 else:
                     new_dic[key.hex()] = dic[key]
             return new_dic
@@ -183,7 +183,7 @@ class Offer:
         pending_dict: Dict[str, int] = {}
         # First we add up the amounts of all coins that share an ancestor with the offered coins (i.e. a primary coin)
         for asset_id, coins in self.get_offered_coins().items():
-            name = "xch" if asset_id is None else asset_id.hex()
+            name = "bpx" if asset_id is None else asset_id.hex()
             pending_dict[name] = 0
             for coin in coins:
                 root_removal: Coin = self.get_root_removal(coin)
@@ -191,11 +191,11 @@ class Offer:
                 for addition in filter(lambda c: c.parent_coin_info == root_removal.name(), all_additions):
                     pending_dict[name] += addition.amount
 
-        # Then we add a potential fee as pending XCH
+        # Then we add a potential fee as pending BPX
         fee: int = sum(c.amount for c in all_removals) - sum(c.amount for c in all_additions)
         if fee > 0:
-            pending_dict.setdefault("xch", 0)
-            pending_dict["xch"] += fee
+            pending_dict.setdefault("bpx", 0)
+            pending_dict["bpx"] += fee
 
         # Then we gather anything else as unknown
         sum_of_additions_so_far: int = sum(pending_dict.values())
@@ -270,7 +270,7 @@ class Offer:
         for tail_hash, payments in self.requested_payments.items():
             offered_coins: List[Coin] = self.get_offered_coins()[tail_hash]
 
-            # Because of CAT supply laws, we must specify a place for the leftovers to go
+            # Because of token supply laws, we must specify a place for the leftovers to go
             arbitrage_amount: int = self.arbitrage()[tail_hash]
             all_payments: List[NotarizedPayment] = payments.copy()
             if arbitrage_amount > 0:
@@ -287,7 +287,7 @@ class Offer:
                         inner_solutions.append((nonce, [np.as_condition_args() for np in nonce_payments]))
 
                 if tail_hash:
-                    # CATs have a special way to be solved so we have to do some calculation before getting the solution
+                    # Tokens have a special way to be solved so we have to do some calculation before getting the solution
                     parent_spend: CoinSpend = list(
                         filter(lambda cs: cs.coin.name() == coin.parent_coin_info, self.bundle.coin_spends)
                     )[0]

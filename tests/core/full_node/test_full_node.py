@@ -356,7 +356,7 @@ class TestFullNodeBlockCompression:
         await time_out_assert(10, check_transaction_confirmed, True, new_tr)
         await asyncio.sleep(0.5)
 
-        # Confirm generator is not compressed, #CAT creation has a cat spend
+        # Confirm generator is not compressed, #token creation has a token spend
         all_blocks = await full_node_1.get_all_full_blocks()
         program: Optional[SerializedProgram] = all_blocks[-1].transactions_generator
         assert program is not None

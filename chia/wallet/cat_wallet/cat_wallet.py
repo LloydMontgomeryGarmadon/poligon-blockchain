@@ -62,7 +62,7 @@ class CATWallet:
 
     @staticmethod
     async def create_new_cat_wallet(
-        wallet_state_manager: Any, wallet: Wallet, cat_tail_info: Dict[str, Any], amount: uint64, name="CAT WALLET"
+        wallet_state_manager: Any, wallet: Wallet, cat_tail_info: Dict[str, Any], amount: uint64, name="TOKEN WALLET"
     ):
         self = CATWallet()
         self.cost_of_single_tx = None
@@ -101,7 +101,7 @@ class CATWallet:
 
         await self.wallet_state_manager.add_new_wallet(self, self.id())
 
-        # Change and actual CAT coin
+        # Change and actual token coin
         non_ephemeral_coins: List[Coin] = spend_bundle.not_ephemeral_additions()
         cc_coin = None
         puzzle_store = self.wallet_state_manager.puzzle_store
@@ -114,7 +114,7 @@ class CATWallet:
                 cc_coin = c
 
         if cc_coin is None:
-            raise ValueError("Internal Error, unable to generate new CAT coin")
+            raise ValueError("Internal Error, unable to generate new token coin")
         cc_pid: bytes32 = cc_coin.parent_coin_info
 
         cc_record = TransactionRecord(
@@ -142,7 +142,7 @@ class CATWallet:
 
     @staticmethod
     async def create_wallet_for_cat(
-        wallet_state_manager: Any, wallet: Wallet, limitations_program_hash_hex: str, name="CAT WALLET"
+        wallet_state_manager: Any, wallet: Wallet, limitations_program_hash_hex: str, name="TOKEN WALLET"
     ) -> CATWallet:
         self = CATWallet()
         self.cost_of_single_tx = None
@@ -152,7 +152,7 @@ class CATWallet:
         for id, wallet in wallet_state_manager.wallets.items():
             if wallet.type() == CATWallet.type():
                 if wallet.get_asset_id() == limitations_program_hash_hex:  # type: ignore
-                    self.log.warning("Not creating wallet for already existing CAT wallet")
+                    self.log.warning("Not creating wallet for already existing token wallet")
                     raise ValueError("Wallet already exists")
 
         self.wallet_state_manager = wallet_state_manager
@@ -229,7 +229,7 @@ class CATWallet:
                 mempool_mode=True,
             )
             self.cost_of_single_tx = result.cost
-            self.log.info(f"Cost of a single tx for CAT wallet: {self.cost_of_single_tx}")
+            self.log.info(f"Cost of a single tx for token wallet: {self.cost_of_single_tx}")
 
         max_cost = self.wallet_state_manager.constants.MAX_BLOCK_COST_CLVM / 2  # avoid full block TXs
         current_cost = 0
@@ -326,7 +326,7 @@ class CATWallet:
             )
             await self.wallet_state_manager.action_store.action_done(action_id)
         else:
-            # The parent is not a CAT which means we need to scrub all of its children from our DB
+            # The parent is not a token which means we need to scrub all of its children from our DB
             child_coin_records = await self.wallet_state_manager.coin_store.get_coin_records_by_parent_id(coin_name)
             if len(child_coin_records) > 0:
                 for record in child_coin_records:
@@ -466,7 +466,7 @@ class CATWallet:
                             assert bytes(synthetic_pk) == pk
                             sigs.append(AugSchemeMPL.sign(synthetic_secret_key, msg))
                         except AssertionError:
-                            raise ValueError("This spend bundle cannot be signed by the CAT wallet")
+                            raise ValueError("This spend bundle cannot be signed by the token wallet")
 
         agg_sig = AugSchemeMPL.aggregate(sigs)
         return SpendBundle.aggregate([spend_bundle, SpendBundle([], agg_sig)])
@@ -577,7 +577,7 @@ class CATWallet:
         selected_cat_amount = sum([c.amount for c in cat_coins])
         assert selected_cat_amount >= starting_amount
 
-        # Figure out if we need to absorb/melt some XCH as part of this
+        # Figure out if we need to absorb/melt some BPX as part of this
         regular_chia_to_claim: int = 0
         if payment_amount > starting_amount:
             fee = uint64(fee + payment_amount - starting_amount)

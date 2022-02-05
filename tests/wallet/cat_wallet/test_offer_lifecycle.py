@@ -27,7 +27,7 @@ acs = Program.to(1)
 acs_ph = acs.get_tree_hash()
 
 
-# Some methods mapping strings to CATs
+# Some methods mapping strings to tokens
 def str_to_tail(tail_str: str) -> Program:
     return Program.to([3, [], [1, tail_str], []])
 
@@ -50,7 +50,7 @@ class TestOfferLifecycle:
         await sim.farm_block()
         return sim, sim_client
 
-    # This method takes a dictionary of strings mapping to amounts and generates the appropriate CAT/XCH coins
+    # This method takes a dictionary of strings mapping to amounts and generates the appropriate token/BPX coins
     async def generate_coins(
         self,
         sim,
@@ -60,7 +60,7 @@ class TestOfferLifecycle:
         await sim.farm_block(acs_ph)
         parent_coin: Coin = [cr.coin for cr in await (sim_client.get_coin_records_by_puzzle_hash(acs_ph))][0]
 
-        # We need to gather a list of initial coins to create as well as spends that do the eve spend for every CAT
+        # We need to gather a list of initial coins to create as well as spends that do the eve spend for every token
         payments: List[Payment] = []
         cat_bundles: List[SpendBundle] = []
         for tail_str, amounts in requested_coins.items():
@@ -189,7 +189,7 @@ class TestOfferLifecycle:
             red_coins: List[Coin] = all_coins["red"]
             blue_coins: List[Coin] = all_coins["blue"]
 
-            # Create an XCH Offer for RED
+            # Create an BPX Offer for RED
             chia_requested_payments: Dict[Optional[bytes32], List[Payment]] = {
                 str_to_tail_hash("red"): [
                     Payment(acs_ph, 100, [b"memo"]),
@@ -205,7 +205,7 @@ class TestOfferLifecycle:
             chia_offer = Offer(chia_requested_payments, chia_secured_bundle)
             assert not chia_offer.is_valid()
 
-            # Create a RED Offer for XCH
+            # Create a RED Offer for BPX
             red_requested_payments: Dict[Optional[bytes32], List[Payment]] = {
                 None: [
                     Payment(acs_ph, 300, [b"red memo"]),
@@ -229,7 +229,7 @@ class TestOfferLifecycle:
             assert new_offer.get_requested_amounts() == {None: 700, str_to_tail_hash("red"): 300}
             assert new_offer.is_valid()
 
-            # Create yet another offer of BLUE for XCH and RED
+            # Create yet another offer of BLUE for BPX and RED
             blue_requested_payments: Dict[Optional[bytes32], List[Payment]] = {
                 None: [
                     Payment(acs_ph, 200, [b"blue memo"]),
@@ -259,14 +259,14 @@ class TestOfferLifecycle:
             assert new_offer.get_requested_amounts() == {None: 900, str_to_tail_hash("red"): 350}
             assert new_offer.summary() == (
                 {
-                    "xch": 1000,
+                    "bpx": 1000,
                     str_to_tail_hash("red").hex(): 350,
                     str_to_tail_hash("blue").hex(): 2000,
                 },
-                {"xch": 900, str_to_tail_hash("red").hex(): 350},
+                {"bpx": 900, str_to_tail_hash("red").hex(): 350},
             )
             assert new_offer.get_pending_amounts() == {
-                "xch": 1200,
+                "bpx": 1200,
                 str_to_tail_hash("red").hex(): 350,
                 str_to_tail_hash("blue").hex(): 3000,
             }

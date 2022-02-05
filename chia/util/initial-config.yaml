@@ -4,7 +4,7 @@ min_mainnet_k_size: 32
 ping_interval: 120
 self_hostname: &self_hostname "localhost"
 prefer_ipv6: False
-daemon_port: 55400
+daemon_port: 27910
 daemon_max_message_size: 50000000 # maximum size of RPC message in bytes
 inbound_rate_limit_percent: 100
 outbound_rate_limit_percent: 30
@@ -13,95 +13,39 @@ network_overrides: &network_overrides
   constants:
     mainnet:
       NETWORK_TYPE: 0
-      GENESIS_CHALLENGE: ccd5bb71183532bff220ba46c268991a3ff07eb358e8255a65c30a2dce0e5fbb
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
+      GENESIS_CHALLENGE: ac43cd6665c8c034621a22243e0c9b14d5441e6cd987f23a5201fb24537183d6
+      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "20364a37d68351cab14507bb712bdd3d3eb5774bb2dc40149fe191bc0eb54d32"
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "20364a37d68351cab14507bb712bdd3d3eb5774bb2dc40149fe191bc0eb54d32"
     testnet0:
       MIN_PLOT_SIZE: 18
-      GENESIS_CHALLENGE: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      GENESIS_CHALLENGE: 2e4199cef60b581e8a85e0bd023c2256f565f4fd81b32a0877be0ccc9ada3dde
       NETWORK_TYPE: 1
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
-    testnet2:
-      MIN_PLOT_SIZE: 18
-      GENESIS_CHALLENGE: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-      NETWORK_TYPE: 1
-      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
-    testnet3:
-      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
-      GENESIS_CHALLENGE: ca7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
-      MIN_PLOT_SIZE: 18
-      NETWORK_TYPE: 1
-      MEMPOOL_BLOCK_BUFFER: 10
-    testnet4:
-      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
-      GENESIS_CHALLENGE: dd7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
-      MIN_PLOT_SIZE: 18
-      NETWORK_TYPE: 1
-      MEMPOOL_BLOCK_BUFFER: 10
-      EPOCH_BLOCKS: 768
-      DIFFICULTY_STARTING: 30
-    testnet5:
-      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
-      GENESIS_CHALLENGE: ee7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
-      MIN_PLOT_SIZE: 18
-      NETWORK_TYPE: 1
-      MEMPOOL_BLOCK_BUFFER: 10
-      EPOCH_BLOCKS: 768
-      DIFFICULTY_STARTING: 30
-    testnet7:
-      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
-      GENESIS_CHALLENGE: 117816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
-      MIN_PLOT_SIZE: 18
-      NETWORK_TYPE: 1
-      MEMPOOL_BLOCK_BUFFER: 50
-      EPOCH_BLOCKS: 768
-      DIFFICULTY_STARTING: 30
+      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "20364a37d68351cab14507bb712bdd3d3eb5774bb2dc40149fe191bc0eb54d32"
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "20364a37d68351cab14507bb712bdd3d3eb5774bb2dc40149fe191bc0eb54d32"
     testnet10:
-      AGG_SIG_ME_ADDITIONAL_DATA: ae83525ba8d1dd3f09b277de18ca3e43fc0af20d20c4b3e92ef2a48bd291ccb2
+      AGG_SIG_ME_ADDITIONAL_DATA: f9b4379cfc755ea9454a9f89f5e3b5806de6ef7c1eb021f77daf2703833795cd
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       DIFFICULTY_STARTING: 30
       EPOCH_BLOCKS: 768
-      GENESIS_CHALLENGE: ae83525ba8d1dd3f09b277de18ca3e43fc0af20d20c4b3e92ef2a48bd291ccb2
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
-      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
+      GENESIS_CHALLENGE: f9b4379cfc755ea9454a9f89f5e3b5806de6ef7c1eb021f77daf2703833795cd
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "476c8e005a19818cbcf2aad64b2bee80b9846c93fa12b1d874d509970ff5f871"
+      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "476c8e005a19818cbcf2aad64b2bee80b9846c93fa12b1d874d509970ff5f871"
       MEMPOOL_BLOCK_BUFFER: 10
       MIN_PLOT_SIZE: 18
       NETWORK_TYPE: 1
   config:
     mainnet:
-      address_prefix: "xch"
-      default_full_node_port: 8444
+      address_prefix: "bpx"
+      default_full_node_port: 27911
     testnet0:
-      address_prefix: "txch"
-      default_full_node_port: 58444
-    testnet1:
-      address_prefix: "txch"
-    testnet2:
-      address_prefix: "txch"
-    testnet3:
-      address_prefix: "txch"
-    testnet4:
-      address_prefix: "txch"
-    testnet7:
-      address_prefix: "txch"
-      default_full_node_port: 58444
+      address_prefix: "tbpx"
+      default_full_node_port: 28011
     testnet10:
-      address_prefix: "txch"
-      default_full_node_port: 58444
+      address_prefix: "tbpx"
+      default_full_node_port: 28011
 
 selected_network: &selected_network "mainnet"
-ALERTS_URL: https://download.chia.net/notify/mainnet_alert.txt
+ALERTS_URL: https://download.bpxcoin.cc/notify/mainnet_alert.txt
 CHIA_ALERTS_PUBKEY: 89b7fd87cb56e926ecefb879a29aae308be01f31980569f6a75a69d2a9a69daefd71fb778d865f7c50d6c967e3025937
 
 # public ssl ca is included in source code
@@ -133,14 +77,14 @@ logging: &logging
 
 seeder:
   # The fake full node used for crawling will run on this port.
-  port: 8444
-  # Most full nodes on the network run on this port. (i.e. 8444 for mainnet, 58444 for testnet).
-  other_peers_port: 8444
-  # Path to crawler DB. If empty, will use $CHIA_ROOT/crawler.db
+  port: 27911
+  # Most full nodes on the network run on this port. (i.e. 27911 for mainnet, 28011 for testnet).
+  other_peers_port: 27911
+  # Path to crawler DB. If empty, will use $BPX_ROOT/crawler.db
   crawler_db_path: ""
   # Peers used for the initial run.
   bootstrap_peers:
-    - "node.chia.net"
+    - "node.bpxcoin.cc"
   # Only consider nodes synced at least to this height.
   minimum_height: 240000
   # How many of a particular version we need to see before reporting it in the logs
@@ -161,14 +105,14 @@ seeder:
 
 harvester:
   # The harvester server (if run) will run on this port
-  port: 8448
+  port: 27915
   farmer_peer:
     host: *self_hostname
-    port: 8447
+    port: 27914
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 8560
+  rpc_port: 27925
   num_threads: 30
   plots_refresh_parameter:
     interval_seconds: 120 # The interval in seconds to refresh the plot file manager
@@ -201,7 +145,7 @@ harvester:
 
 pool:
   # Replace this with a real puzzle hash
-  # xch_target_address: txch102gkhhzs60grx7cfnpng5n6rjecr89r86l5s8xux2za8k820cxsq64ssdg
+  # bpx_target_address: tbpx102gkhhzs60grx7cfnpng5n6rjecr89r86l5s8xux2za8k820cxsq64ssdg
   logging: *logging
   network_overrides: *network_overrides
   selected_network: *selected_network
@@ -209,23 +153,23 @@ pool:
 
 farmer:
   # The farmer server (if run) will run on this port
-  port: 8447
+  port: 27914
   # The farmer will attempt to connect to this full node and harvester
   full_node_peer:
     host: *self_hostname
-    port: 8444
+    port: 27911
   harvester_peer:
     host: *self_hostname
-    port: 8448
+    port: 27915
 
   pool_public_keys: []
 
   # Replace this with a real puzzle hash
-  # xch_target_address: txch102gkhhzs60grx7cfnpng5n6rjecr89r86l5s8xux2za8k820cxsq64ssdg
+  # bpx_target_address: tbpx102gkhhzs60grx7cfnpng5n6rjecr89r86l5s8xux2za8k820cxsq64ssdg
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 8559
+  rpc_port: 27924
 
   # To send a share to a pool, a proof of space must have required_iters less than this number
   pool_share_threshold: 1000
@@ -243,7 +187,7 @@ farmer:
 timelord_launcher:
   # The server where the VDF clients will connect to.
   host: *self_hostname
-  port: 8000
+  port: 27933
   # Number of VDF client processes to keep alive in the local machine.
   process_count: 3
   logging: *logging
@@ -251,7 +195,7 @@ timelord_launcher:
 
 timelord:
   # The timelord server (if run) will run on this port
-  port: 8446
+  port: 27913
   # Provides a list of VDF clients expected to connect to this timelord.
   # For each client, an IP is provided, together with the estimated iterations per second.
   vdf_clients:
@@ -263,13 +207,13 @@ timelord:
       - 150000
   full_node_peer:
       host: *self_hostname
-      port: 8444
+      port: 27911
   # Maximum number of seconds allowed for a client to reconnect to the server.
   max_connection_time: 60
   # The ip and port where the TCP clients will connect.
   vdf_server:
     host: *self_hostname
-    port: 8000
+    port: 27933
   logging: *logging
   network_overrides: *network_overrides
   selected_network: *selected_network
@@ -304,7 +248,7 @@ timelord:
 
 full_node:
   # The full node server (if run) will run on this port
-  port: 8444
+  port: 27911
 
   # controls the sync-to-disk behavior of the database connection. Can be one of:
   # "on"    enables syncing to disk, minimizes risk of corrupting the DB in
@@ -316,7 +260,15 @@ full_node:
   #         kernel panics
   # "auto"  on/off is decided based on a heuristic of how likely a failure is on
   #         the particular system we're running on. Defaults to "full".
-  db_sync: "auto"
+  db_sync: auto
+
+  # when this is true, minor data base updates may be performed on startup.
+  # the database upgrades are minor, in that they typically remove unnevessary
+  # indices or re-build certain indices. The intention of these updates is to
+  # improve performance of the node at the expense of a one-time startup cost.
+  # also note that enabling this may prohibit down-grading the node to a
+  # previous version, or may trigger an index rebuild on startup on down-grades.
+  allow_database_upgrades: False
 
   # Run multiple nodes with different databases by changing the database_path
   database_path: db/blockchain_v2_CHALLENGE.sqlite
@@ -330,7 +282,7 @@ full_node:
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 8555
+  rpc_port: 27921
 
   # Use UPnP to attempt to allow other full nodes to reach your node behind a gateway
   enable_upnp: True
@@ -340,10 +292,6 @@ full_node:
 
   # If node is more than these blocks behind, will do a short batch-sync, if it's less, will do a backtrack sync
   short_sync_blocks_behind_threshold: 20
-
-  # When creating process pools the process count will generally be the CPU count minus
-  # this reserved core count.
-  reserved_cores: 0
 
   # How often to initiate outbound connections to other full nodes.
   peer_connect_interval: 30
@@ -388,19 +336,19 @@ full_node:
   # List of trusted DNS seeders to bootstrap from.
   # If you modify this, please change the hardcode as well from FullNode.set_server()
   dns_servers:
-    - "dns-introducer.chia.net"
+    - "dns-introducer.bpxcoin.cc"
   farmer_peer:
       host: *self_hostname
-      port: 8447
+      port: 27914
   timelord_peer:
       host: *self_hostname
-      port: 8446
+      port: 27913
   introducer_peer:
-      host: introducer.chia.net  # Chia AWS introducer IPv4/IPv6
-      port: 8444
+      host: introducer.bpxcoin.cc
+      port: 27912
   wallet_peer:
     host: *self_hostname
-    port: 8449
+    port: 27916
   logging: *logging
   network_overrides: *network_overrides
   selected_network: *selected_network
@@ -413,10 +361,10 @@ full_node:
 
 ui:
    # The ui node server (if run) will run on this port
-  port: 8222
+  port: 27980
 
   # Which port to use to communicate with the full node
-  rpc_port: 8555
+  rpc_port: 27921
 
   # This SSH key is for the ui SSH server
   ssh_filename: config/ssh_host_key
@@ -427,14 +375,14 @@ ui:
   # this is where the electron UI will find its daemon
   # defaults to the one running locally with its private keys
   daemon_host: *self_hostname
-  daemon_port: 55400
+  daemon_port: 27910
   daemon_ssl:
     private_crt: config/ssl/daemon/private_daemon.crt
     private_key: config/ssl/daemon/private_daemon.key
 
 introducer:
   host: *self_hostname
-  port: 8445
+  port: 27912
   max_peers_to_send: 20
   # The introducer will only return peers it has seen in the last
   # recent_peer_threshold seconds
@@ -448,15 +396,13 @@ introducer:
     public_key:  "config/ssl/full_node/public_full_node.key"
 
 wallet:
-  port: 8449
-  rpc_port: 9256
+  port: 27916
+  rpc_port: 27926
 
   enable_profiler: False
 
   # see description for full_node.db_sync
   db_sync: auto
-
-  connect_to_unknown_peers: True
 
   # The minimum height that we care about for our transactions. Set to zero
   # If we are restoring from private key and don't know the height.
@@ -466,12 +412,9 @@ wallet:
   initial_num_public_keys: 100
   initial_num_public_keys_new_wallet: 5
 
-  dns_servers:
-    - "dns-introducer.chia.net"
-
   full_node_peer:
     host: *self_hostname
-    port: 8444
+    port: 27911
 
   testing: False
   # v2 used by the light wallet sync protocol
@@ -491,8 +434,8 @@ wallet:
   recent_peer_threshold: 6000
 
   introducer_peer:
-    host: introducer.chia.net # Chia AWS introducer IPv4/IPv6
-    port: 8444
+    host: introducer.bpxcoin.cc
+    port: 27912
 
   ssl:
     private_crt:  "config/ssl/wallet/private_wallet.crt"

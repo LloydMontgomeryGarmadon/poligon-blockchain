@@ -44,7 +44,7 @@ def get_mojo_per_unit(wallet_type: WalletType) -> int:
     elif wallet_type == WalletType.CAT:
         mojo_per_unit = units["cat"]
     else:
-        raise LookupError("Only standard wallet and CAT wallets are supported")
+        raise LookupError("Only standard wallet and token wallets are supported")
 
     return mojo_per_unit
 
@@ -71,7 +71,7 @@ async def get_name_for_wallet_id(
     elif wallet_type == WalletType.CAT:
         name = await wallet_client.get_cat_name(wallet_id=str(wallet_id))
     else:
-        raise LookupError("Only standard wallet and CAT wallets are supported")
+        raise LookupError("Only standard wallet and token wallets are supported")
 
     return name
 
@@ -192,7 +192,7 @@ async def send(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
         print("Submitting transaction...")
         res = await wallet_client.cat_spend(str(wallet_id), final_amount, address, final_fee, memos)
     else:
-        print("Only standard wallet and CAT wallets are supported")
+        print("Only standard wallet and token wallets are supported")
         return
 
     tx_id = res.name
@@ -202,11 +202,11 @@ async def send(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
         tx = await wallet_client.get_transaction(str(wallet_id), tx_id)
         if len(tx.sent_to) > 0:
             print(f"Transaction submitted to nodes: {tx.sent_to}")
-            print(f"Do chia wallet get_transaction -f {fingerprint} -tx 0x{tx_id} to get status")
+            print(f"Do bpx wallet get_transaction -f {fingerprint} -tx 0x{tx_id} to get status")
             return None
 
     print("Transaction not yet submitted to nodes")
-    print(f"Do 'chia wallet get_transaction -f {fingerprint} -tx 0x{tx_id}' to get status")
+    print(f"Do 'bpx wallet get_transaction -f {fingerprint} -tx 0x{tx_id}' to get status")
 
 
 async def get_address(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
@@ -257,7 +257,7 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
         for item in [*offers, *requests]:
             wallet_id, amount = tuple(item.split(":")[0:2])
             if int(wallet_id) == 1:
-                name: str = "XCH"
+                name: str = "BPX"
                 unit: int = units["chia"]
             else:
                 name = await wallet_client.get_cat_name(wallet_id)
@@ -293,7 +293,7 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
                     with open(pathlib.Path(filepath), "w") as file:
                         file.write(offer.to_bech32())
                     print(f"Created offer with ID {trade_record.trade_id}")
-                    print(f"Use chia wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view status")
+                    print(f"Use bpx wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view status")
                 else:
                     print("Error creating offer")
 
@@ -304,9 +304,9 @@ def timestamp_to_time(timestamp):
 
 async def print_offer_summary(wallet_client: WalletRpcClient, sum_dict: dict):
     for asset_id, amount in sum_dict.items():
-        if asset_id == "xch":
+        if asset_id == "bpx":
             wid: str = "1"
-            name: str = "XCH"
+            name: str = "BPX"
             unit: int = units["chia"]
         else:
             result = await wallet_client.cat_asset_id_to_name(bytes32.from_hexstr(asset_id))
@@ -417,7 +417,7 @@ async def take_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
         if confirmation in ["y", "yes"]:
             trade_record = await wallet_client.take_offer(offer, fee=fee)
             print(f"Accepted offer with ID {trade_record.trade_id}")
-            print(f"Use chia wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view its status")
+            print(f"Use bpx wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view its status")
 
 
 async def cancel_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
@@ -433,7 +433,7 @@ async def cancel_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: 
         await wallet_client.cancel_offer(id, secure=secure, fee=fee)
         print(f"Cancelled offer with ID {trade_record.trade_id}")
         if secure:
-            print(f"Use chia wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view cancel status")
+            print(f"Use bpx wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view cancel status")
 
 
 def wallet_coin_unit(typ: WalletType, address_prefix: str) -> Tuple[str, int]:
@@ -478,7 +478,7 @@ async def get_wallet(wallet_client: WalletRpcClient, fingerprint: int = None) ->
     else:
         fingerprints = await wallet_client.get_public_keys()
     if len(fingerprints) == 0:
-        print("No keys loaded. Run 'chia keys generate' or import a key")
+        print("No keys loaded. Run 'bpx keys generate' or import a key")
         return None
     if len(fingerprints) == 1:
         fingerprint = fingerprints[0]
@@ -511,7 +511,7 @@ async def get_wallet(wallet_client: WalletRpcClient, fingerprint: int = None) ->
             use_cloud = True
             if "backup_path" in log_in_response:
                 path = log_in_response["backup_path"]
-                print(f"Backup file from backup.chia.net downloaded and written to: {path}")
+                print(f"Backup file from backup.bpxcoin.cc downloaded and written to: {path}")
                 val = input("Do you want to use this file to restore from backup? (Y/N) ")
                 if val.lower() == "y":
                     log_in_response = await wallet_client.log_in_and_restore(fingerprint, path)
@@ -566,7 +566,7 @@ async def execute_with_wallet(
         if isinstance(e, aiohttp.ClientConnectorError):
             print(
                 f"Connection error. Check if the wallet is running at {wallet_rpc_port}. "
-                "You can run the wallet via:\n\tchia start wallet"
+                "You can run the wallet via:\n\tbpx start wallet"
             )
         else:
             print(f"Exception from 'wallet' {e}")

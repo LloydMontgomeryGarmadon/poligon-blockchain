@@ -61,14 +61,14 @@ dev_dependencies = [
 ]
 
 kwargs = dict(
-    name="chia-blockchain",
-    author="Mariano Sorgente",
-    author_email="mariano@chia.net",
-    description="Chia blockchain full node, farmer, timelord, and wallet.",
-    url="https://chia.net/",
+    name="bpx-blockchain",
+    author="BPX",
+    author_email="hello@bpxcoin.cc",
+    description="BPX blockchain full node, farmer, timelord, and wallet.",
+    url="https://bpxcoin.cc/",
     license="Apache License",
     python_requires=">=3.7, <4",
-    keywords="chia blockchain node",
+    keywords="bpx blockchain node",
     install_requires=dependencies,
     setup_requires=["setuptools_scm"],
     extras_require=dict(
@@ -113,18 +113,18 @@ kwargs = dict(
     ],
     entry_points={
         "console_scripts": [
-            "chia = chia.cmds.chia:main",
-            "chia_wallet = chia.server.start_wallet:main",
-            "chia_full_node = chia.server.start_full_node:main",
-            "chia_harvester = chia.server.start_harvester:main",
-            "chia_farmer = chia.server.start_farmer:main",
-            "chia_introducer = chia.server.start_introducer:main",
-            "chia_seeder = chia.cmds.seeder:main",
-            "chia_seeder_crawler = chia.seeder.start_crawler:main",
-            "chia_seeder_server = chia.seeder.dns_server:main",
-            "chia_timelord = chia.server.start_timelord:main",
-            "chia_timelord_launcher = chia.timelord.timelord_launcher:main",
-            "chia_full_node_simulator = chia.simulator.start_simulator:main",
+            "bpx = chia.cmds.chia:main",
+            "bpx_wallet = chia.server.start_wallet:main",
+            "bpx_full_node = chia.server.start_full_node:main",
+            "bpx_harvester = chia.server.start_harvester:main",
+            "bpx_farmer = chia.server.start_farmer:main",
+            "bpx_introducer = chia.server.start_introducer:main",
+            "bpx_seeder = chia.cmds.seeder:main",
+            "bpx_seeder_crawler = chia.seeder.start_crawler:main",
+            "bpx_seeder_server = chia.seeder.dns_server:main",
+            "bpx_timelord = chia.server.start_timelord:main",
+            "bpx_timelord_launcher = chia.timelord.timelord_launcher:main",
+            "bpx_full_node_simulator = chia.simulator.start_simulator:main",
         ]
     },
     package_data={

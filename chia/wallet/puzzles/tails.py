@@ -44,7 +44,7 @@ class LimitationsProgram:
 
 class GenesisById(LimitationsProgram):
     """
-    This TAIL allows for coins to be issued only by a specific "genesis" coin ID.
+    This limiter allows for coins to be issued only by a specific "genesis" coin ID.
     There can therefore only be one issuance. There is no minting or melting allowed.
     """
 
@@ -113,7 +113,7 @@ class GenesisById(LimitationsProgram):
 
 class GenesisByPuzhash(LimitationsProgram):
     """
-    This TAIL allows for issuance of a certain coin only by a specific puzzle hash.
+    This limiter allows for issuance of a certain coin only by a specific puzzle hash.
     There is no minting or melting allowed.
     """
 
@@ -137,7 +137,7 @@ class GenesisByPuzhash(LimitationsProgram):
 
 class EverythingWithSig(LimitationsProgram):
     """
-    This TAIL allows for issuance, minting, and melting as long as you provide a signature with the spend.
+    This limiter allows for issuance, minting, and melting as long as you provide a signature with the spend.
     """
 
     @staticmethod
@@ -159,7 +159,7 @@ class EverythingWithSig(LimitationsProgram):
 
 class DelegatedLimitations(LimitationsProgram):
     """
-    This TAIL allows for another TAIL to be used, as long as a signature of that TAIL's puzzlehash is included.
+    This limiter allows for another TAIL to be used, as long as a signature of that TAIL's puzzlehash is included.
     """
 
     @staticmethod

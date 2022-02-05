@@ -11,7 +11,7 @@ def keys_cmd(ctx: click.Context):
 
     root_path: Path = ctx.obj["root_path"]
     if not root_path.is_dir():
-        raise RuntimeError("Please initialize (or migrate) your config directory with chia init")
+        raise RuntimeError("Please initialize (or migrate) your config directory with bpx init")
 
 
 @keys_cmd.command("generate", short_help="Generates and adds a key to keychain")
@@ -136,7 +136,7 @@ def verify_cmd(message: str, public_key: str, signature: str):
     verify(message, public_key, signature)
 
 
-@keys_cmd.command("migrate", short_help="Attempt to migrate keys to the Chia keyring")
+@keys_cmd.command("migrate", short_help="Attempt to migrate keys to the BPX keyring")
 @click.pass_context
 def migrate_cmd(ctx: click.Context):
     from .keys_funcs import migrate_keys
@@ -244,7 +244,7 @@ def search_cmd(
     "--index", "-i", help="Index of the first wallet address to derive. Index 0 is the first wallet address.", default=0
 )
 @click.option("--count", "-n", help="Number of wallet addresses to derive, starting at index.", default=1)
-@click.option("--prefix", "-x", help="Address prefix (xch for mainnet, txch for testnet)", default=None, type=str)
+@click.option("--prefix", "-x", help="Address prefix (bpx for mainnet, tbpx for testnet)", default=None, type=str)
 @click.option(
     "--non-observer-derivation",
     "-d",

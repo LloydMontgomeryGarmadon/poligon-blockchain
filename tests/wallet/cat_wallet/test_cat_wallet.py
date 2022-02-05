@@ -246,7 +246,7 @@ class TestCATWallet:
         await cat_wallet.set_tail_program(bytes(cat_wallet.cat_info.my_tail).hex())
         assert await wallet_node.wallet_state_manager.get_wallet_for_asset_id(asset_id) == cat_wallet
 
-        # Test that the a default CAT will initialize correctly
+        # Test that the a default token will initialize correctly
         asset = DEFAULT_CATS[next(iter(DEFAULT_CATS))]
         asset_id = asset["asset_id"]
         cat_wallet_2 = await CATWallet.create_wallet_for_cat(wallet_node.wallet_state_manager, wallet, asset_id)
@@ -702,7 +702,7 @@ class TestCATWallet:
 
         await time_out_assert(10, check_wallets, 1, wallet_node_2)
 
-        # Then we update the wallet's default CATs
+        # Then we update the wallet's default tokens
         wallet_node_2.wallet_state_manager.default_cats = {
             cat_wallet.cat_info.limitations_program_hash.hex(): {
                 "asset_id": cat_wallet.cat_info.limitations_program_hash.hex(),

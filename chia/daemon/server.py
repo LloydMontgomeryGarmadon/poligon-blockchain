@@ -58,7 +58,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-service_plotter = "chia_plotter"
+service_plotter = "bpx_plotter"
 
 
 async def fetch(url: str):
@@ -91,18 +91,18 @@ class PlotEvent(str, Enum):
 # determine if application is a script file or frozen exe
 if getattr(sys, "frozen", False):
     name_map = {
-        "chia": "chia",
-        "chia_wallet": "start_wallet",
-        "chia_full_node": "start_full_node",
-        "chia_harvester": "start_harvester",
-        "chia_farmer": "start_farmer",
-        "chia_introducer": "start_introducer",
-        "chia_timelord": "start_timelord",
-        "chia_timelord_launcher": "timelord_launcher",
-        "chia_full_node_simulator": "start_simulator",
-        "chia_seeder": "chia_seeder",
-        "chia_seeder_crawler": "chia_seeder_crawler",
-        "chia_seeder_dns": "chia_seeder_dns",
+        "bpx": "bpx",
+        "bpx_wallet": "start_wallet",
+        "bpx_full_node": "start_full_node",
+        "bpx_harvester": "start_harvester",
+        "bpx_farmer": "start_farmer",
+        "bpx_introducer": "start_introducer",
+        "bpx_timelord": "start_timelord",
+        "bpx_timelord_launcher": "timelord_launcher",
+        "bpx_full_node_simulator": "start_simulator",
+        "bpx_seeder": "bpx_seeder",
+        "bpx_seeder_crawler": "bpx_seeder_crawler",
+        "bpx_seeder_dns": "bpx_seeder_dns",
     }
 
     def executable_for_service(service_name: str) -> str:
@@ -410,7 +410,7 @@ class WebSocketServer:
                     else:
                         self.log.debug("Skipping legacy key migration (previously attempted).")
                 except Exception:
-                    self.log.exception("Failed to migrate keys silently. Run `chia keys migrate` manually.")
+                    self.log.exception("Failed to migrate keys silently. Run `bpx keys migrate` manually.")
 
                 # Inform the GUI of keyring status changes
                 self.keyring_status_changed(await self.keyring_status(), "wallet_ui")
@@ -1197,8 +1197,8 @@ def plotter_log_path(root_path: Path, id: str):
 
 
 def launch_plotter(root_path: Path, service_name: str, service_array: List[str], id: str):
-    # we need to pass on the possibly altered CHIA_ROOT
-    os.environ["CHIA_ROOT"] = str(root_path)
+    # we need to pass on the possibly altered BPX_ROOT
+    os.environ["BPX_ROOT"] = str(root_path)
     service_executable = executable_for_service(service_array[0])
 
     # Swap service name with name of executable
@@ -1247,21 +1247,21 @@ def launch_service(root_path: Path, service_command) -> Tuple[subprocess.Popen, 
     """
     Launch a child process.
     """
-    # set up CHIA_ROOT
+    # set up BPX_ROOT
     # invoke correct script
     # save away PID
 
-    # we need to pass on the possibly altered CHIA_ROOT
-    os.environ["CHIA_ROOT"] = str(root_path)
+    # we need to pass on the possibly altered BPX_ROOT
+    os.environ["BPX_ROOT"] = str(root_path)
 
-    log.debug(f"Launching service with CHIA_ROOT: {os.environ['CHIA_ROOT']}")
+    log.debug(f"Launching service with BPX_ROOT: {os.environ['BPX_ROOT']}")
 
     # Insert proper e
     service_array = service_command.split()
     service_executable = executable_for_service(service_array[0])
     service_array[0] = service_executable
 
-    if service_command == "chia_full_node_simulator":
+    if service_command == "bpx_full_node_simulator":
         # Set the -D/--connect_to_daemon flag to signify that the child should connect
         # to the daemon to access the keychain
         service_array.append("-D")
@@ -1433,7 +1433,7 @@ async def async_run_daemon(root_path: Path, wait_for_unlock: bool = False) -> in
     # since it might be necessary to wait for the GUI to unlock the keyring first.
     chia_init(root_path, should_check_keys=(not wait_for_unlock))
     config = load_config(root_path, "config.yaml")
-    setproctitle("chia_daemon")
+    setproctitle("bpx_daemon")
     initialize_logging("daemon", config["logging"], root_path)
     lockfile = singleton(daemon_launch_lock_path(root_path))
     crt_path = root_path / config["daemon_ssl"]["private_crt"]

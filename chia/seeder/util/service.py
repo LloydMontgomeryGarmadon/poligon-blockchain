@@ -14,14 +14,14 @@ def launch_service(root_path: Path, service_command) -> Tuple[subprocess.Popen, 
     """
     Launch a child process.
     """
-    # set up CHIA_ROOT
+    # set up BPX_ROOT
     # invoke correct script
     # save away PID
 
-    # we need to pass on the possibly altered CHIA_ROOT
-    os.environ["CHIA_ROOT"] = str(root_path)
+    # we need to pass on the possibly altered BPX_ROOT
+    os.environ["BPX_ROOT"] = str(root_path)
 
-    print(f"Launching service with CHIA_ROOT: {os.environ['CHIA_ROOT']}")
+    print(f"Launching service with BPX_ROOT: {os.environ['BPX_ROOT']}")
 
     # Insert proper e
     service_array = service_command.split()
@@ -80,9 +80,9 @@ def kill_service(root_path: Path, service_name: str) -> bool:
 # determine if application is a script file or frozen exe
 if getattr(sys, "frozen", False):
     name_map = {
-        "chia_seeder": "chia_seeder",
-        "chia_seeder_crawler": "chia_seeder_crawler",
-        "chia_seeder_server": "chia_seeder_server",
+        "bpx_seeder": "bpx_seeder",
+        "bpx_seeder_crawler": "bpx_seeder_crawler",
+        "bpx_seeder_server": "bpx_seeder_server",
     }
 
     def executable_for_service(service_name: str) -> str:

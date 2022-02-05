@@ -1,8 +1,8 @@
 ; This is a "genesis checker" for use with cc.clvm.
 ;
-; This checker allows new CATs to be created if they have a particular coin id as parent
+; This checker allows new tokens to be created if they have a particular coin id as parent
 ;
-; The genesis_id is curried in, making this lineage_check program unique and giving the CAT it's uniqueness
+; The genesis_id is curried in, making this lineage_check program unique and giving the token it's uniqueness
 (mod (
       GENESIS_ID
       Truths

@@ -89,7 +89,7 @@ class TestCATTrades:
         wallet_maker = wallet_node_maker.wallet_state_manager.main_wallet
         wallet_taker = wallet_node_taker.wallet_state_manager.main_wallet
 
-        # Create two new CATs, one in each wallet
+        # Create two new tokens, one in each wallet
         async with wallet_node_maker.wallet_state_manager.lock:
             cat_wallet_maker: CATWallet = await CATWallet.create_new_cat_wallet(
                 wallet_node_maker.wallet_state_manager, wallet_maker, {"identifier": "genesis_by_id"}, uint64(100)
@@ -128,11 +128,11 @@ class TestCATTrades:
 
         chia_for_cat = {
             wallet_maker.id(): -1,
-            new_cat_wallet_maker.id(): 2,  # This is the CAT that the taker made
+            new_cat_wallet_maker.id(): 2,  # This is the token that the taker made
         }
         cat_for_chia = {
             wallet_maker.id(): 3,
-            cat_wallet_maker.id(): -4,  # The taker has no knowledge of this CAT yet
+            cat_wallet_maker.id(): -4,  # The taker has no knowledge of this token yet
         }
         cat_for_cat = {
             cat_wallet_maker.id(): -5,
@@ -499,7 +499,7 @@ class TestCATTrades:
         assert success is True
         assert trade_make is not None
 
-        # This take should fail since we have no CATs to fulfill it with
+        # This take should fail since we have no tokens to fulfill it with
         success, trade_take, error = await trade_manager_taker.respond_to_offer(Offer.from_bytes(trade_make.offer))
         await asyncio.sleep(1)
         assert error is not None

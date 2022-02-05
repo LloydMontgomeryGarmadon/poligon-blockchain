@@ -18,8 +18,8 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(
-    help=f"\n  Manage the Chia Seeder ({__version__})\n",
-    epilog="Try 'chia seeder start crawler' or 'chia seeder start server'",
+    help=f"\n  Manage the BPX Seeder ({__version__})\n",
+    epilog="Try 'bpx seeder start crawler' or 'bpx seeder start server'",
     context_settings=CONTEXT_SETTINGS,
 )
 @click.option("--root-path", default=DEFAULT_ROOT_PATH, help="Config file root", type=click.Path(), show_default=True)
@@ -34,7 +34,7 @@ def cli(
     ctx.obj["root_path"] = Path(root_path)
 
 
-@cli.command("version", short_help="Show the Chia Seeder version")
+@cli.command("version", short_help="Show the BPX Seeder version")
 def version_cmd() -> None:
     print(__version__)
 
@@ -42,14 +42,14 @@ def version_cmd() -> None:
 @click.command("init", short_help="Create or migrate the configuration")
 @click.pass_context
 def init_cmd(ctx: click.Context, **kwargs):
-    print("Calling Chia Seeder Init...")
+    print("Calling BPX Seeder Init...")
     init(None, ctx.obj["root_path"], True)
-    if os.environ.get("CHIA_ROOT", None) is not None:
-        print(f"warning, your CHIA_ROOT is set to {os.environ['CHIA_ROOT']}.")
+    if os.environ.get("BPX_ROOT", None) is not None:
+        print(f"warning, your BPX_ROOT is set to {os.environ['BPX_ROOT']}.")
     root_path = ctx.obj["root_path"]
-    print(f"Chia directory {root_path}")
+    print(f"BPX directory {root_path}")
     if root_path.is_dir() and not Path(root_path / "config" / "config.yaml").exists():
-        # This is reached if CHIA_ROOT is set, but there is no config
+        # This is reached if BPX_ROOT is set, but there is no config
         # This really shouldn't happen, but if we dont have the base chia config, we can't continue
         print("Config does not exist. Can't continue!")
         return -1
@@ -94,10 +94,10 @@ def configure(
     change_made = False
     if testnet is not None:
         if testnet == "true" or testnet == "t":
-            print("Updating Chia Seeder to testnet settings")
-            port = 58444
+            print("Updating BPX Seeder to testnet settings")
+            port = 28011
             network = "testnet10"
-            bootstrap = ["testnet-node.chia.net"]
+            bootstrap = ["testnet-node.bpxcoin.cc"]
 
             config["seeder"]["port"] = port
             config["seeder"]["other_peers_port"] = port
@@ -107,10 +107,10 @@ def configure(
             change_made = True
 
         elif testnet == "false" or testnet == "f":
-            print("Updating Chia Seeder to mainnet settings")
-            port = 8444
+            print("Updating BPX Seeder to mainnet settings")
+            port = 27911
             network = "mainnet"
-            bootstrap = ["node.chia.net"]
+            bootstrap = ["node.bpxcoin.cc"]
 
             config["seeder"]["port"] = port
             config["seeder"]["other_peers_port"] = port
@@ -138,7 +138,7 @@ def configure(
         change_made = True
 
     if change_made:
-        print("Restart any running Chia Seeder services for changes to take effect")
+        print("Restart any running BPX Seeder services for changes to take effect")
         save_config(root_path, "config.yaml", config)
     return 0
 

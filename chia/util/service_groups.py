@@ -1,18 +1,18 @@
 from typing import KeysView, Generator
 
 SERVICES_FOR_GROUP = {
-    "all": "chia_harvester chia_timelord_launcher chia_timelord chia_farmer chia_full_node chia_wallet".split(),
-    "node": "chia_full_node".split(),
-    "harvester": "chia_harvester".split(),
-    "farmer": "chia_harvester chia_farmer chia_full_node chia_wallet".split(),
-    "farmer-no-wallet": "chia_harvester chia_farmer chia_full_node".split(),
-    "farmer-only": "chia_farmer".split(),
-    "timelord": "chia_timelord_launcher chia_timelord chia_full_node".split(),
-    "timelord-only": "chia_timelord".split(),
-    "timelord-launcher-only": "chia_timelord_launcher".split(),
-    "wallet": "chia_wallet".split(),
-    "introducer": "chia_introducer".split(),
-    "simulator": "chia_full_node_simulator".split(),
+    "all": "bpx_harvester bpx_timelord_launcher bpx_timelord bpx_farmer bpx_full_node bpx_wallet".split(),
+    "node": "bpx_full_node".split(),
+    "harvester": "bpx_harvester".split(),
+    "farmer": "bpx_harvester bpx_farmer bpx_full_node bpx_wallet".split(),
+    "farmer-no-wallet": "bpx_harvester bpx_farmer bpx_full_node".split(),
+    "farmer-only": "bpx_farmer".split(),
+    "timelord": "bpx_timelord_launcher bpx_timelord bpx_full_node".split(),
+    "timelord-only": "bpx_timelord".split(),
+    "timelord-launcher-only": "bpx_timelord_launcher".split(),
+    "wallet": "bpx_wallet".split(),
+    "introducer": "bpx_introducer".split(),
+    "simulator": "bpx_full_node_simulator".split(),
 }
 
 

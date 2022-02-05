@@ -77,7 +77,7 @@ def get_transactions_cmd(
     sys.stdout.close()
 
 
-@wallet_cmd.command("send", short_help="Send chia to another wallet")
+@wallet_cmd.command("send", short_help="Send BPX to another wallet")
 @click.option(
     "-wp",
     "--wallet-rpc-port",
@@ -87,18 +87,18 @@ def get_transactions_cmd(
 )
 @click.option("-f", "--fingerprint", help="Set the fingerprint to specify which wallet to use", type=int)
 @click.option("-i", "--id", help="Id of the wallet to use", type=int, default=1, show_default=True, required=True)
-@click.option("-a", "--amount", help="How much chia to send, in XCH", type=str, required=True)
+@click.option("-a", "--amount", help="How much BPX to send", type=str, required=True)
 @click.option("-e", "--memo", help="Additional memo for the transaction", type=str, default=None)
 @click.option(
     "-m",
     "--fee",
-    help="Set the fees for the transaction, in XCH",
+    help="Set the fees for the transaction, in BPX",
     type=str,
     default="0",
     show_default=True,
     required=True,
 )
-@click.option("-t", "--address", help="Address to send the XCH", type=str, required=True)
+@click.option("-t", "--address", help="Address to send the BPX", type=str, required=True)
 @click.option(
     "-o", "--override", help="Submits transaction without checking for unusual values", is_flag=True, default=False
 )
@@ -173,7 +173,7 @@ def delete_unconfirmed_transactions_cmd(wallet_rpc_port: Optional[int], id, fing
     asyncio.run(execute_with_wallet(wallet_rpc_port, fingerprint, extra_params, delete_unconfirmed_transactions))
 
 
-@wallet_cmd.command("add_token", short_help="Add/Rename a CAT to the wallet by its asset ID")
+@wallet_cmd.command("add_token", short_help="Add/Rename a token to the wallet by its asset ID")
 @click.option(
     "-wp",
     "--wallet-rpc-port",
@@ -184,7 +184,7 @@ def delete_unconfirmed_transactions_cmd(wallet_rpc_port: Optional[int], id, fing
 @click.option(
     "-id",
     "--asset-id",
-    help="The Asset ID of the coin you wish to add/rename (the treehash of the TAIL program)",
+    help="The Asset ID of the coin you wish to add/rename (the treehash of the limiter program)",
     required=True,
 )
 @click.option(
@@ -207,7 +207,7 @@ def add_token_cmd(wallet_rpc_port: Optional[int], asset_id: str, token_name: str
     asyncio.run(execute_with_wallet(wallet_rpc_port, fingerprint, extra_params, add_token))
 
 
-@wallet_cmd.command("make_offer", short_help="Create an offer of XCH/CATs for XCH/CATs")
+@wallet_cmd.command("make_offer", short_help="Create an offer of BPX/tokens for BPX/tokens")
 @click.option(
     "-wp",
     "--wallet-rpc-port",

@@ -12,7 +12,7 @@
     )
   )
 
-  ; CAT Truths is: ((Inner puzzle hash . (MOD hash . (MOD hash hash . TAIL hash))) . (my_id . (my_parent_info my_puzhash my_amount)))
+  ; Token Truths is: ((Inner puzzle hash . (MOD hash . (MOD hash hash . TAIL hash))) . (my_id . (my_parent_info my_puzhash my_amount)))
 
   (defun-inline my_inner_puzzle_hash_cat_truth (Truths) (f (f Truths)))
   (defun-inline cat_struct_truth (Truths) (r (f Truths)))
@@ -23,7 +23,7 @@
   (defun-inline my_parent_cat_truth (Truths) (f (my_coin_info_truth Truths)))
 
 
-  ; CAT mod_struct is: (MOD_HASH MOD_HASH_hash TAIL_PROGRAM TAIL_PROGRAM_hash)
+  ; Token mod_struct is: (MOD_HASH MOD_HASH_hash TAIL_PROGRAM TAIL_PROGRAM_hash)
 
   (defun-inline cat_mod_hash_truth (Truths) (f (cat_struct_truth Truths)))
   (defun-inline cat_mod_hash_hash_truth (Truths) (f (r (cat_struct_truth Truths))))

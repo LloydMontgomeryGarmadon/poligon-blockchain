@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-run_block: Convert an encoded FullBlock from the Chia blockchain into a list of transactions
+run_block: Convert an encoded FullBlock from the BPX blockchain into a list of transactions
 
 As input, takes a file containing a [FullBlock](../chia/types/full_block.py) in json format
 

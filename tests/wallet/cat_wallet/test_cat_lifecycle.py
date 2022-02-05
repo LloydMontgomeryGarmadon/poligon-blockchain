@@ -160,7 +160,7 @@ class TestCATLifecycle:
                 ],
                 (MempoolInclusionStatus.SUCCESS, None),
                 limitations_solutions=[checker_solution] * 2,
-                cost_str="Two CATs",
+                cost_str="Two tokens",
             )
 
             # Testing a combination of three
@@ -187,7 +187,7 @@ class TestCATLifecycle:
                 ],
                 (MempoolInclusionStatus.SUCCESS, None),
                 limitations_solutions=[checker_solution] * 3,
-                cost_str="Three CATs",
+                cost_str="Three tokens",
             )
 
             # Spend with a standard lineage proof

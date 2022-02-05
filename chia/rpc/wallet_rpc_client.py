@@ -27,7 +27,7 @@ class WalletRpcClient(RpcClient):
         try:
             return await self.fetch(
                 "log_in",
-                {"host": "https://backup.chia.net", "fingerprint": fingerprint, "type": "start"},
+                {"host": "https://backup.bpxcoin.cc", "fingerprint": fingerprint, "type": "start"},
             )
 
         except ValueError as e:
@@ -38,7 +38,7 @@ class WalletRpcClient(RpcClient):
             return await self.fetch(
                 "log_in",
                 {
-                    "host": "https://backup.chia.net",
+                    "host": "https://backup.bpxcoin.cc",
                     "fingerprint": fingerprint,
                     "type": "restore_backup",
                     "file_path": file_path,
@@ -51,7 +51,7 @@ class WalletRpcClient(RpcClient):
         try:
             return await self.fetch(
                 "log_in",
-                {"host": "https://backup.chia.net", "fingerprint": fingerprint, "type": "skip"},
+                {"host": "https://backup.bpxcoin.cc", "fingerprint": fingerprint, "type": "skip"},
             )
         except ValueError as e:
             return e.args[0]
@@ -352,7 +352,7 @@ class WalletRpcClient(RpcClient):
             [TransactionRecord.from_json_dict(tr) for tr in json_dict["unconfirmed_transactions"]],
         )
 
-    # CATS
+    # Tokens
     async def create_new_cat_and_wallet(self, amount: uint64) -> Dict:
         request: Dict[str, Any] = {
             "wallet_type": "cat_wallet",

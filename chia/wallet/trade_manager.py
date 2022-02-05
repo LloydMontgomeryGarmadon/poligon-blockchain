@@ -186,7 +186,7 @@ class TradeManager:
             if wallet is None:
                 continue
             new_ph = await wallet.get_new_puzzlehash()
-            # This should probably not switch on whether or not we're spending a CAT but it has to for now
+            # This should probably not switch on whether or not we're spending a token but it has to for now
             if wallet.type() == WalletType.CAT:
                 txs = await wallet.generate_signed_transaction(
                     [coin.amount], [new_ph], fee=fee_to_pay, coins={coin}, ignore_max_send_amount=True
@@ -297,7 +297,7 @@ class TradeManager:
             fee_left_to_pay: uint64 = fee
             for wallet_id, selected_coins in coins_to_offer.items():
                 wallet = self.wallet_state_manager.wallets[wallet_id]
-                # This should probably not switch on whether or not we're spending a CAT but it has to for now
+                # This should probably not switch on whether or not we're spending a token but it has to for now
 
                 if wallet.type() == WalletType.CAT:
                     txs = await wallet.generate_signed_transaction(
@@ -451,7 +451,7 @@ class TradeManager:
             else:
                 wallet = await self.wallet_state_manager.get_wallet_for_asset_id(asset_id.hex())
                 if wallet is None and amount < 0:
-                    return False, None, f"Do not have a CAT of asset ID: {asset_id} to fulfill offer"
+                    return False, None, f"Do not have a token of asset ID: {asset_id} to fulfill offer"
                 elif wallet is None:
                     key = asset_id
                 else:
