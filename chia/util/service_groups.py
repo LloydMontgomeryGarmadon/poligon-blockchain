@@ -13,6 +13,9 @@ SERVICES_FOR_GROUP = {
     "wallet": "bpx_wallet".split(),
     "introducer": "bpx_introducer".split(),
     "simulator": "bpx_full_node_simulator".split(),
+    "crawler": "bpx_crawler".split(),
+    "seeder": "bpx_crawler bpx_seeder".split(),
+    "seeder-only": "bpx_seeder".split(),
 }
 
 

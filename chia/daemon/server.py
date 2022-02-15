@@ -100,9 +100,8 @@ if getattr(sys, "frozen", False):
         "bpx_timelord": "start_timelord",
         "bpx_timelord_launcher": "timelord_launcher",
         "bpx_full_node_simulator": "start_simulator",
-        "bpx_seeder": "bpx_seeder",
-        "bpx_seeder_crawler": "bpx_seeder_crawler",
-        "bpx_seeder_dns": "bpx_seeder_dns",
+        "bpx_seeder": "start_seeder",
+        "bpx_crawler": "start_crawler",
     }
 
     def executable_for_service(service_name: str) -> str:

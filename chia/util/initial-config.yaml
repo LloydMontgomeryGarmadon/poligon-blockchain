@@ -80,8 +80,10 @@ seeder:
   port: 27911
   # Most full nodes on the network run on this port. (i.e. 27911 for mainnet, 28011 for testnet).
   other_peers_port: 27911
+  # This will override the default full_node.peer_connect_timeout for the crawler full node
+  peer_connect_timeout: 2
   # Path to crawler DB. If empty, will use $BPX_ROOT/crawler.db
-  crawler_db_path: ""
+  crawler_db_path: "crawler.db"
   # Peers used for the initial run.
   bootstrap_peers:
     - "node.bpxcoin.cc"
@@ -102,6 +104,13 @@ seeder:
   network_overrides: *network_overrides
   selected_network: *selected_network
   logging: *logging
+  # Crawler is its own standalone service within the seeder component
+  crawler:
+    start_rpc_server: True
+    rpc_port: 27927
+    ssl:
+      private_crt: "config/ssl/crawler/private_crawler.crt"
+      private_key: "config/ssl/crawler/private_crawler.key"
 
 harvester:
   # The harvester server (if run) will run on this port
@@ -260,15 +269,7 @@ full_node:
   #         kernel panics
   # "auto"  on/off is decided based on a heuristic of how likely a failure is on
   #         the particular system we're running on. Defaults to "full".
-  db_sync: auto
-
-  # when this is true, minor data base updates may be performed on startup.
-  # the database upgrades are minor, in that they typically remove unnevessary
-  # indices or re-build certain indices. The intention of these updates is to
-  # improve performance of the node at the expense of a one-time startup cost.
-  # also note that enabling this may prohibit down-grading the node to a
-  # previous version, or may trigger an index rebuild on startup on down-grades.
-  allow_database_upgrades: False
+  db_sync: "auto"
 
   # Run multiple nodes with different databases by changing the database_path
   database_path: db/blockchain_v2_CHALLENGE.sqlite
@@ -292,6 +293,10 @@ full_node:
 
   # If node is more than these blocks behind, will do a short batch-sync, if it's less, will do a backtrack sync
   short_sync_blocks_behind_threshold: 20
+
+  # When creating process pools the process count will generally be the CPU count minus
+  # this reserved core count.
+  reserved_cores: 0
 
   # How often to initiate outbound connections to other full nodes.
   peer_connect_interval: 30
@@ -404,13 +409,17 @@ wallet:
   # see description for full_node.db_sync
   db_sync: auto
 
+  connect_to_unknown_peers: True
+
   # The minimum height that we care about for our transactions. Set to zero
   # If we are restoring from private key and don't know the height.
   starting_height: 0
   start_height_buffer: 100  # Wallet will stop fly sync at starting_height - buffer
   num_sync_batches: 50
   initial_num_public_keys: 100
-  initial_num_public_keys_new_wallet: 5
+
+  dns_servers:
+    - "dns-introducer.bpxcoin.cc"
 
   full_node_peer:
     host: *self_hostname
