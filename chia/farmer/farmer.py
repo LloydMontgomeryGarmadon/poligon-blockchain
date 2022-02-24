@@ -18,7 +18,7 @@ from chia.daemon.keychain_proxy import (
     connect_to_keychain_and_validate,
     wrap_local_keychain,
 )
-from chia.pools.pool_config import PoolWalletConfig, load_pool_config
+from chia.pools.pool_config import PoolWalletConfig, load_pool_config, add_auth_key
 from chia.protocols import farmer_protocol, harvester_protocol
 from chia.protocols.pool_protocol import (
     ErrorResponse,
@@ -347,7 +347,7 @@ class Farmer:
         assert owner_sk.get_g1() == pool_config.owner_public_key
         signature: G2Element = AugSchemeMPL.sign(owner_sk, post_farmer_payload.get_hash())
         post_farmer_request = PostFarmerRequest(post_farmer_payload, signature)
-
+        self.log.debug(f"POST /farmer request {post_farmer_request}")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
@@ -387,7 +387,7 @@ class Farmer:
         assert owner_sk.get_g1() == pool_config.owner_public_key
         signature: G2Element = AugSchemeMPL.sign(owner_sk, put_farmer_payload.get_hash())
         put_farmer_request = PutFarmerRequest(put_farmer_payload, signature)
-
+        self.log.debug(f"PUT /farmer request {put_farmer_request}")
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.put(
@@ -422,6 +422,7 @@ class Farmer:
 
     async def update_pool_state(self):
         config = load_config(self._root_path, "config.yaml")
+
         pool_config_list: List[PoolWalletConfig] = load_pool_config(self._root_path)
         for pool_config in pool_config_list:
             p2_singleton_puzzle_hash = pool_config.p2_singleton_puzzle_hash
@@ -432,6 +433,9 @@ class Farmer:
                 if authentication_sk is None:
                     self.log.error(f"Could not find authentication sk for {p2_singleton_puzzle_hash}")
                     continue
+
+                add_auth_key(self._root_path, pool_config, authentication_sk.get_g1())
+
                 if p2_singleton_puzzle_hash not in self.pool_state:
                     self.pool_state[p2_singleton_puzzle_hash] = {
                         "points_found_since_start": 0,
