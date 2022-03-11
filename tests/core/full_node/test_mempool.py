@@ -1819,10 +1819,10 @@ class TestGeneratorConditions:
         [
             (True, 0, -1, Err.GENERATOR_RUNTIME_ERROR.value),
             (False, 1000000, -1, None),
-            (False, 2300000, -1, Err.GENERATOR_RUNTIME_ERROR.value),
+            (False, 700000, -1, Err.GENERATOR_RUNTIME_ERROR.value),
             (True, 0, 1, None),
             (False, 1000000, 1, None),
-            (False, 2300000, 1, None),
+            (False, 700000, 1, None),
         ],
     )
     def test_div(self, mempool, height: uint32, operand, expected):
@@ -2057,7 +2057,7 @@ class TestGeneratorConditions:
         [
             (True, None),
             (False, 1000000),
-            (False, 2300000),
+            (False, 700000),
         ],
     )
     def test_unknown_condition(self, mempool: bool, height: uint32):
@@ -2203,7 +2203,7 @@ class TestMaliciousGenerators:
         start_time = time()
         npc_result = generator_condition_tester(condition, quote=False, height=softfork_height)
         run_time = time() - start_time
-        if softfork_height >= 2300000:
+        if softfork_height >= 700000:
             assert npc_result.error == error_for_condition(opcode)
         else:
             assert npc_result.error is None
@@ -2231,7 +2231,7 @@ class TestMaliciousGenerators:
         start_time = time()
         npc_result = generator_condition_tester(condition, quote=False, height=softfork_height)
         run_time = time() - start_time
-        if softfork_height >= 2300000:
+        if softfork_height >= 700000:
             assert npc_result.error == error_for_condition(opcode)
         else:
             assert npc_result.error is None
@@ -2259,7 +2259,7 @@ class TestMaliciousGenerators:
         start_time = time()
         npc_result = generator_condition_tester(condition, quote=False, height=softfork_height)
         run_time = time() - start_time
-        if softfork_height >= 2300000:
+        if softfork_height >= 700000:
             assert npc_result.error == error_for_condition(opcode)
         else:
             assert npc_result.error is None
@@ -2289,7 +2289,7 @@ class TestMaliciousGenerators:
         start_time = time()
         npc_result = generator_condition_tester(condition, quote=False, height=softfork_height)
         run_time = time() - start_time
-        if softfork_height >= 2300000:
+        if softfork_height >= 700000:
             assert npc_result.error == error_for_condition(opcode)
         else:
             assert npc_result.error is None
@@ -2326,7 +2326,7 @@ class TestMaliciousGenerators:
         start_time = time()
         npc_result = generator_condition_tester(condition, quote=False, height=softfork_height)
         run_time = time() - start_time
-        if softfork_height >= 2300000:
+        if softfork_height >= 700000:
             assert npc_result.error == error_for_condition(opcode)
         else:
             assert npc_result.error is None
