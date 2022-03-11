@@ -70,7 +70,7 @@ logging: &logging
   log_filename: "log/debug.log"
   log_level: "WARNING"  # Can be CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
   log_maxfilesrotation: 7 #  Max files in rotation. Default value 7 if the key is not set
-  log_maxbytessrotation: 52428800 #  Max bytes logged before rotating logs
+  log_maxbytesrotation: 52428800 #  Max bytes logged before rotating logs
   log_syslog: False  # If True, outputs to SysLog host and port specified
   log_syslog_host: "localhost"  # Send logging messages to a remote or local Unix syslog
   log_syslog_port: 514  # UDP port of the remote or local Unix syslog
@@ -249,6 +249,8 @@ timelord:
   # If `slow_bluebox` is True, launches `slow_bluebox_process_count` processes.
   slow_bluebox_process_count: 1
 
+  multiprocessing_start_method: default
+
   start_rpc_server: True
   rpc_port: 27923
 
@@ -283,6 +285,8 @@ full_node:
   # simulator_peer_db_path is deprecated and has been replaced by simulator_peers_file_path
   simulator_peer_db_path: sim_db/peer_table_node.sqlite
   simulator_peers_file_path: sim_db/peer_table_node.dat
+
+  multiprocessing_start_method: default
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
@@ -428,6 +432,8 @@ wallet:
     host: *self_hostname
     port: 27911
 
+  multiprocessing_start_method: default
+
   testing: False
   # v2 used by the light wallet sync protocol
   database_path: wallet/db/blockchain_wallet_v2_CHALLENGE_KEY.sqlite
@@ -466,3 +472,7 @@ wallet:
 
   # timeout for weight proof request
   weight_proof_timeout: *weight_proof_timeout
+
+  # if an unknown token belonging to us is seen, a wallet will be automatically created
+  # the user accepts the risk/responsibility of verifying the authenticity and origin of unknown tokens
+  automatically_add_unknown_tokens: False

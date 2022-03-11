@@ -404,7 +404,7 @@ def chia_init(
 
     print(f"BPX directory {root_path}")
     if root_path.is_dir() and Path(root_path / "config" / "config.yaml").exists():
-        # This is reached if BPX_ROOT is set, or if user has run chia init twice
+        # This is reached if BPX_ROOT is set, or if user has run bpx init twice
         # before a new update.
         if testnet:
             configure(

@@ -90,8 +90,7 @@ cd ../../../build_scripts || exit
 DMG_NAME="BPX-$BPX_INSTALLER_VERSION-arm64.dmg"
 echo "Create $DMG_NAME"
 mkdir final_installer
-electron-installer-dmg dist/BPX-darwin-arm64/BPX.app BPX-$BPX_INSTALLER_VERSION-arm64 \
---overwrite --out final_installer
+NODE_PATH=./npm_macos_m1/node_modules node build_dmg.js dist/BPX-darwin-arm64/BPX.app $BPX_INSTALLER_VERSION-arm64
 LAST_EXIT_CODE=$?
 if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	echo >&2 "electron-installer-dmg failed!"

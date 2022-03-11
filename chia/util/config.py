@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import shutil
 import sys
@@ -7,6 +8,7 @@ from typing import Any, Callable, Dict, Optional, Union
 
 import pkg_resources
 import yaml
+from typing_extensions import Literal
 
 from chia.util.path import mkdir
 
@@ -61,7 +63,7 @@ def load_config(
         if not exit_on_error:
             raise ValueError("Config not found")
         print(f"can't find {path}")
-        print("** please run `chia init` to migrate or create new config files **")
+        print("** please run `bpx init` to migrate or create new config files **")
         # TODO: fix this hack
         sys.exit(-1)
     r = yaml.safe_load(open(path, "r"))
@@ -162,3 +164,39 @@ def traverse_dict(d: Dict, key_path: str) -> Any:
         return val
     else:
         raise KeyError(f"value not found for key: {key}")
+
+
+method_strings = Literal["default", "python_default", "fork", "forkserver", "spawn"]
+method_values = Optional[Literal["fork", "forkserver", "spawn"]]
+start_methods: Dict[method_strings, method_values] = {
+    "default": None,
+    "python_default": None,
+    "fork": "fork",
+    "forkserver": "forkserver",
+    "spawn": "spawn",
+}
+
+
+def process_config_start_method(
+    config: Dict[str, Any],
+    log=logging.Logger,
+) -> method_values:
+    from_config: object = config.get("multiprocessing_start_method")
+
+    choice: method_strings
+    if from_config is None:
+        # handle not only the key being missing, but also set to None
+        choice = "default"
+    elif from_config not in start_methods.keys():
+        start_methods_string = ", ".join(option for option in start_methods.keys())
+        log.warning(f"Configured start method {from_config!r} not available in: {start_methods_string}")
+        choice = "default"
+    else:
+        # mypy doesn't realize that by the time we get here from_config must be one of
+        # the keys in `start_methods` due to the above `not in` condition.
+        choice = from_config  # type: ignore[assignment]
+
+    processed_method = start_methods[choice]
+    log.info(f"Selected multiprocessing start method: {choice}")
+
+    return processed_method
