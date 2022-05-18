@@ -1,4 +1,4 @@
-name: Linux ARM64 installer on Python 3.8
+name: Build Installer - Linux DEB ARM64
 
 on:
   push:
@@ -18,8 +18,8 @@ concurrency:
 
 jobs:
   build:
-    name: Linux ARM64 installer on Python 3.8
-    runs-on: [ARM64]
+    name: Linux arm64 DEB Installer
+    runs-on: [Linux, ARM64]
     container: chianetwork/ubuntu-18.04-builder:latest
     timeout-minutes: 120
     strategy:
@@ -31,8 +31,11 @@ jobs:
     steps:
     - uses: bpx-network/actions/clean-workspace@main
 
+    - name: Add safe git directory
+      uses: bpx-network/actions/git-mark-workspace-safe@main
+
     - name: Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
         submodules: recursive
@@ -63,17 +66,17 @@ jobs:
         SECRET: "${{ secrets.INSTALLER_UPLOAD_SECRET }}"
 
       # Get the most recent release from chia-plotter-madmax
-    - uses: actions/github-script@v4
+    - uses: actions/github-script@v6
       id: 'latest-madmax'
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         result-encoding: string
         script: |
-          const releases = await github.repos.listReleases({
+          const release = await github.rest.repos.getLatestRelease({
             owner: 'Chia-Network',
             repo: 'chia-plotter-madmax',
           });
-          return releases.data[0].tag_name;
+          return release.data.tag_name;
 
     - name: Get latest madmax plotter
       run: |
@@ -84,17 +87,17 @@ jobs:
         chmod +x "$GITHUB_WORKSPACE/madmax/chia_plot_k34"
 
       # Get the most recent release from bladebit
-    - uses: actions/github-script@v4
+    - uses: actions/github-script@v6
       id: 'latest-bladebit'
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         result-encoding: string
         script: |
-          const releases = await github.repos.listReleases({
+          const release = await github.rest.repos.getLatestRelease({
             owner: 'Chia-Network',
             repo: 'bladebit',
           });
-          return releases.data[0].tag_name;
+          return release.data.tag_name;
 
     - name: Get latest bladebit plotter
       run: |
@@ -106,23 +109,23 @@ jobs:
     - name: Run install script
       env:
         INSTALL_PYTHON_VERSION: ${{ matrix.python-version }}
-        BUILD_VDF_CLIENT: "N"
       run: |
-        sh install.sh
+        sh install.sh -d
 
     - name: Build arm64 .deb package
+      env:
+        BPX_INSTALLER_VERSION: ${{ steps.version_number.outputs.BPX_INSTALLER_VERSION }}
       run: |
-        . ./activate
         ldd --version
-        cd ./bpx-blockchain-gui
-        git status
-        cd ../build_scripts
+        git -C ./bpx-blockchain-gui status
+        . ./activate
+        cd ./build_scripts
         sh build_linux_deb.sh arm64
 
     - name: Upload Linux artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: Linux-ARM-64-Installer
+        name: bpx-installers-linux-deb-arm64
         path: ${{ github.workspace }}/build_scripts/final_installer/
 
     - name: Clean up on self hosted runner
