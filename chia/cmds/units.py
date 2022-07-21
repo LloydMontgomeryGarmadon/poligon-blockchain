@@ -5,5 +5,5 @@ from typing import Dict
 units: Dict[str, int] = {
     "chia": 10 ** 12,  # 1 BPX is 1,000,000,000,000 mojo (1 trillion)
     "mojo": 1,
-    "cat": 10 ** 3,  # 1 CAT is 1000 CAT mojos
+    "cat": 10 ** 6,  # 1 token is 1,000,000 mojos
 }
