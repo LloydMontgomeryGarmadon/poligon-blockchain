@@ -244,7 +244,6 @@ class WebSocketServer:
                             self.log.error(f"Unexpected exception trying to send to websocket: {e} {tb}")
                             self.remove_connection(socket)
                             await socket.close()
-                            break
             else:
                 service_name = "Unknown"
                 if ws in self.remote_address_map:
@@ -848,7 +847,7 @@ class WebSocketServer:
 
     def _build_plotting_command_args(self, request: Any, ignoreCount: bool, index: int) -> List[str]:
         plotter: str = request.get("plotter", "chiapos")
-        command_args: List[str] = ["chia", "plotters", plotter]
+        command_args: List[str] = ["bpx", "plotters", plotter]
 
         command_args.extend(self._common_plotting_command_args(request, ignoreCount))
 

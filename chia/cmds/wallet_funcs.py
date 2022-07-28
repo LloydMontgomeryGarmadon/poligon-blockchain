@@ -4,21 +4,23 @@ import sys
 import time
 from datetime import datetime
 from decimal import Decimal
-from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple, Union
 
 import aiohttp
 
+from chia.cmds.cmds_util import transaction_submitted_msg, transaction_status_msg
 from chia.cmds.show import print_connections
 from chia.cmds.units import units
 from chia.rpc.wallet_rpc_client import WalletRpcClient
 from chia.server.outbound_message import NodeType
 from chia.server.start_wallet import SERVICE_NAME
 from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.util.bech32m import encode_puzzle_hash
+from chia.util.bech32m import bech32_decode, decode_puzzle_hash, encode_puzzle_hash
 from chia.util.config import load_config
 from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.ints import uint16, uint32, uint64
-from chia.cmds.cmds_util import transaction_submitted_msg, transaction_status_msg
+from chia.util.ints import uint16, uint32, uint64, uint128
+from chia.wallet.did_wallet.did_info import DID_HRP
+from chia.wallet.nft_wallet.nft_info import NFT_HRP, NFTInfo
 from chia.wallet.trade_record import TradeRecord
 from chia.wallet.trading.offer import Offer
 from chia.wallet.trading.trade_status import TradeStatus
@@ -27,7 +29,6 @@ from chia.wallet.util.transaction_type import TransactionType
 from chia.wallet.util.wallet_types import WalletType
 
 CATNameResolver = Callable[[bytes32], Awaitable[Optional[Tuple[Optional[uint32], str]]]]
-
 
 transaction_type_descriptions = {
     TransactionType.INCOMING_TX: "received",
@@ -190,6 +191,7 @@ async def send(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
     fee = Decimal(args["fee"])
     address = args["address"]
     override = args["override"]
+    min_coin_amount = Decimal(args["min_coin_amount"])
     memo = args["memo"]
     if memo is None:
         memos = None
@@ -211,14 +213,21 @@ async def send(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
 
     final_fee = uint64(int(fee * units["chia"]))
     final_amount: uint64
+    final_min_coin_amount: uint128
     if typ == WalletType.STANDARD_WALLET:
         final_amount = uint64(int(amount * units["chia"]))
+        final_min_coin_amount = uint128(int(min_coin_amount * units["chia"]))
         print("Submitting transaction...")
-        res = await wallet_client.send_transaction(str(wallet_id), final_amount, address, final_fee, memos)
+        res = await wallet_client.send_transaction(
+            str(wallet_id), final_amount, address, final_fee, memos, final_min_coin_amount
+        )
     elif typ == WalletType.CAT:
         final_amount = uint64(int(amount * units["cat"]))
+        final_min_coin_amount = uint128(int(min_coin_amount * units["cat"]))
         print("Submitting transaction...")
-        res = await wallet_client.cat_spend(str(wallet_id), final_amount, address, final_fee, memos)
+        res = await wallet_client.cat_spend(
+            str(wallet_id), final_amount, address, final_fee, memos, final_min_coin_amount
+        )
     else:
         print("Only standard wallet and token wallets are supported")
         return
@@ -248,6 +257,19 @@ async def delete_unconfirmed_transactions(args: dict, wallet_client: WalletRpcCl
     wallet_id = args["id"]
     await wallet_client.delete_unconfirmed_transactions(wallet_id)
     print(f"Successfully deleted all unconfirmed transactions for wallet id {wallet_id} on key {fingerprint}")
+
+
+async def get_derivation_index(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
+    res = await wallet_client.get_current_derivation_index()
+    print(f"Last derivation index: {res}")
+
+
+async def update_derivation_index(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
+    index = args["index"]
+    print("Updating derivation index... This may take a while.")
+    res = await wallet_client.extend_derivation_index(index)
+    print(f"Updated derivation index: {res}")
+    print("Your balances may take a while to update.")
 
 
 async def add_token(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
@@ -281,23 +303,66 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
     if [] in [offers, requests]:
         print("Not creating offer: Must be offering and requesting at least one asset")
     else:
-        offer_dict: Dict[uint32, int] = {}
+        offer_dict: Dict[Union[uint32, str], int] = {}
+        driver_dict: Dict[str, Any] = {}
         printable_dict: Dict[str, Tuple[str, int, int]] = {}  # Dict[asset_name, Tuple[amount, unit, multiplier]]
+        nft_warning: bool = False
         for item in [*offers, *requests]:
-            wallet_id, amount = tuple(item.split(":")[0:2])
-            if int(wallet_id) == 1:
-                name: str = "BPX"
-                unit: int = units["chia"]
-            else:
-                name = await wallet_client.get_cat_name(wallet_id)
-                unit = units["cat"]
+            name, amount = tuple(item.split(":")[0:2])
+            try:
+                id: Union[uint32, str] = bytes32.from_hexstr(name).hex()
+                unit = 1
+            except ValueError:
+                try:
+                    hrp, _ = bech32_decode(name)
+                    if hrp == "nft":
+                        coin_id = decode_puzzle_hash(name)
+                        unit = 1
+                        info = NFTInfo.from_json_dict((await wallet_client.get_nft_info(coin_id.hex()))["nft_info"])
+                        nft_warning = True
+                        id = info.launcher_id.hex()
+                        assert isinstance(id, str)
+                        if item in requests:
+                            driver_dict[id] = {
+                                "type": "singleton",
+                                "launcher_id": "0x" + id,
+                                "launcher_ph": "0x" + info.launcher_puzhash.hex(),
+                                "also": {
+                                    "type": "metadata",
+                                    "metadata": info.chain_info,
+                                    "updater_hash": "0x" + info.updater_puzhash.hex(),
+                                },
+                            }
+                            if info.supports_did:
+                                driver_dict[id]["also"]["also"] = {
+                                    "type": "ownership",
+                                    "owner": "()",
+                                    "transfer_program": {
+                                        "type": "royalty transfer program",
+                                        "launcher_id": "0x" + info.launcher_id.hex(),
+                                        "royalty_address": "0x" + info.royalty_puzzle_hash.hex(),
+                                        "royalty_percentage": str(info.royalty_percentage),
+                                    },
+                                }
+                    else:
+                        id = decode_puzzle_hash(name).hex()
+                        assert hrp is not None
+                        unit = units[hrp]
+                except ValueError:
+                    id = uint32(int(name))
+                    if id == 1:
+                        name = "BPX"
+                        unit = units["chia"]
+                    else:
+                        name = await wallet_client.get_cat_name(str(id))
+                        unit = units["cat"]
             multiplier: int = -1 if item in offers else 1
             printable_dict[name] = (amount, unit, multiplier)
-            if uint32(int(wallet_id)) in offer_dict:
+            if id in offer_dict:
                 print("Not creating offer: Cannot offer and request the same asset in a trade")
                 break
             else:
-                offer_dict[uint32(int(wallet_id))] = int(Decimal(amount) * unit) * multiplier
+                offer_dict[id] = int(Decimal(amount) * unit) * multiplier
         else:
             print("Creating Offer")
             print("--------------")
@@ -313,11 +378,22 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
                 if multiplier > 0:
                     print(f"  - {amount} {name} ({int(Decimal(amount) * unit)} mojos)")
 
+            if nft_warning:
+                nft_confirmation = input(
+                    "Offers for NFTs will have royalties automatically added.  "
+                    + "Are you sure you would like to continue? (y/n): "
+                )
+                if nft_confirmation not in ["y", "yes"]:
+                    print("Not creating offer...")
+                    return
+
             confirmation = input("Confirm (y/n): ")
             if confirmation not in ["y", "yes"]:
                 print("Not creating offer...")
             else:
-                offer, trade_record = await wallet_client.create_offer_for_ids(offer_dict, fee=fee)
+                offer, trade_record = await wallet_client.create_offer_for_ids(
+                    offer_dict, driver_dict=driver_dict, fee=fee
+                )
                 if offer is not None:
                     with open(pathlib.Path(filepath), "w") as file:
                         file.write(offer.to_bech32())
@@ -375,7 +451,7 @@ async def print_trade_record(record, wallet_client: WalletRpcClient, summaries: 
     if summaries:
         print("Summary:")
         offer = Offer.from_bytes(record.offer)
-        offered, requested = offer.summary()
+        offered, requested, _ = offer.summary()
         outbound_balances: Dict[str, int] = offer.get_pending_amounts()
         fees: Decimal = Decimal(offer.bundle.fees())
         cat_name_resolver = wallet_client.cat_asset_id_to_name
@@ -452,16 +528,50 @@ async def take_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
         print("Please enter a valid offer file or hex blob")
         return
 
-    offered, requested = offer.summary()
+    offered, requested, driver_dict = offer.summary()
     cat_name_resolver = wallet_client.cat_asset_id_to_name
     print("Summary:")
     print("  OFFERED:")
     await print_offer_summary(cat_name_resolver, offered)
     print("  REQUESTED:")
     await print_offer_summary(cat_name_resolver, requested)
+
+    print()
+
+    nft_coin_id: Optional[bytes32] = nft_coin_id_supporting_royalties_from_offer(driver_dict)
+    nft_royalty_percentage: int = (
+        0 if nft_coin_id is None else await get_nft_royalty_percentage(nft_coin_id, wallet_client)
+    )
+    nft_total_amount_requested_str: Optional[str] = None
+    if nft_coin_id is not None and nft_royalty_percentage > 0:
+        print("NFT Royalty Fee:")
+        nft_royalty_asset_id, nft_royalty_amount, nft_total_amount_requested = calculate_nft_royalty_amount(
+            offered, requested, nft_coin_id, nft_royalty_percentage
+        )
+        nft_royalty_currency: str = "Unknown token"
+        if nft_royalty_asset_id == "bpx":
+            nft_royalty_currency = "BPX"
+        else:
+            result = await cat_name_resolver(bytes32.fromhex(nft_royalty_asset_id))
+            if result is not None:
+                nft_royalty_currency = result[1]
+
+        nft_royalty_divisor = units["chia"] if nft_royalty_asset_id == "bpx" else units["cat"]
+        nft_total_amount_requested_str = (
+            f"{Decimal(nft_total_amount_requested) / nft_royalty_divisor} {nft_royalty_currency}"
+        )
+        print(
+            f"      {Decimal(nft_royalty_amount) / nft_royalty_divisor} {nft_royalty_currency} "
+            f"({nft_royalty_amount} mojos)"
+        )
+
     print(f"Included Fees: {Decimal(offer.bundle.fees()) / units['chia']}")
 
+    if nft_total_amount_requested_str is not None:
+        print(f"Total Amount Requested: {nft_total_amount_requested_str}")
+
     if not examine_only:
+        print()
         confirmation = input("Would you like to take this offer? (y/n): ")
         if confirmation in ["y", "yes"]:
             trade_record = await wallet_client.take_offer(offer, fee=fee)
@@ -494,7 +604,7 @@ def wallet_coin_unit(typ: WalletType, address_prefix: str) -> Tuple[str, int]:
 
 
 def print_balance(amount: int, scale: int, address_prefix: str) -> str:
-    ret = f"{amount/scale} {address_prefix} "
+    ret = f"{amount / scale} {address_prefix} "
     if scale > 1:
         ret += f"({amount} mojo)"
     return ret
@@ -539,13 +649,23 @@ async def print_balances(args: dict, wallet_client: WalletRpcClient, fingerprint
                 balances["unconfirmed_wallet_balance"], scale, address_prefix
             )
             spendable_balance: str = print_balance(balances["spendable_balance"], scale, address_prefix)
+            my_did: Optional[str] = None
             print()
             print(f"{summary['name']}:")
             print(f"{indent}{'-Total Balance:'.ljust(23)} {total_balance}")
             print(f"{indent}{'-Pending Total Balance:'.ljust(23)} " f"{unconfirmed_wallet_balance}")
             print(f"{indent}{'-Spendable:'.ljust(23)} {spendable_balance}")
             print(f"{indent}{'-Type:'.ljust(23)} {typ.name}")
-            if len(asset_id) > 0:
+            if typ == WalletType.DECENTRALIZED_ID:
+                get_did_response = await wallet_client.get_did_id(wallet_id)
+                my_did = get_did_response["my_did"]
+                print(f"{indent}{'-DID ID:'.ljust(23)} {my_did}")
+            elif typ == WalletType.NFT:
+                get_did_response = await wallet_client.get_nft_wallet_did(wallet_id)
+                my_did = get_did_response["did_id"]
+                if my_did is not None and len(my_did) > 0:
+                    print(f"{indent}{'-DID ID:'.ljust(23)} {my_did}")
+            elif len(asset_id) > 0:
                 print(f"{indent}{'-Asset ID:'.ljust(23)} {asset_id}")
             print(f"{indent}{'-Wallet ID:'.ljust(23)} {wallet_id}")
 
@@ -579,7 +699,7 @@ async def get_wallet(wallet_client: WalletRpcClient, fingerprint: int = None) ->
                 current_sync_status = "Not Synced"
         print("Wallet keys:")
         for i, fp in enumerate(fingerprints):
-            row: str = f"{i+1}) "
+            row: str = f"{i + 1}) "
             row += "* " if fp == logged_in_fingerprint else spacing
             row += f"{fp}"
             if fp == logged_in_fingerprint and len(current_sync_status) > 0:

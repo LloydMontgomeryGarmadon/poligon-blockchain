@@ -3,7 +3,7 @@ import json
 import logging
 import traceback
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Coroutine, Dict, List, Optional, Tuple
 
 from aiohttp import ClientConnectorError, ClientSession, ClientWebSocketResponse, WSMsgType, web
 
@@ -14,6 +14,7 @@ from chia.types.peer_info import PeerInfo
 from chia.util.byte_types import hexstr_to_bytes
 from chia.util.ints import uint16
 from chia.util.json_util import dict_to_json_str
+from chia.util.network import select_port
 from chia.util.ws_message import create_payload, create_payload_dict, format_response, pong
 
 log = logging.getLogger(__name__)
@@ -309,7 +310,8 @@ async def start_rpc_server(
     net_config,
     connect_to_daemon=True,
     max_request_body_size=None,
-):
+    name: str = "rpc_server",
+) -> Tuple[Callable[[], Coroutine[Any, Any, None]], uint16]:
     """
     Starts an HTTP server with the following RPC methods, to be used by local clients to
     query the node.
@@ -324,8 +326,16 @@ async def start_rpc_server(
         daemon_connection = asyncio.create_task(rpc_server.connect_to_daemon(self_hostname, daemon_port))
     runner = web.AppRunner(app, access_log=None)
     await runner.setup()
+
     site = web.TCPSite(runner, self_hostname, int(rpc_port), ssl_context=rpc_server.ssl_context)
     await site.start()
+
+    #
+    # On a dual-stack system, we want to get the (first) IPv4 port unless
+    # prefer_ipv6 is set in which case we use the IPv6 port
+    #
+    if rpc_port == 0:
+        rpc_port = select_port(root_path, runner.addresses)
 
     async def cleanup():
         await rpc_server.stop()
@@ -333,4 +343,4 @@ async def start_rpc_server(
         if connect_to_daemon:
             await daemon_connection
 
-    return cleanup
+    return cleanup, rpc_port
