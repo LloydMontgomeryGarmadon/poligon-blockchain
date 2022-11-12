@@ -4,7 +4,7 @@ min_mainnet_k_size: 32
 ping_interval: 120
 self_hostname: &self_hostname "localhost"
 prefer_ipv6: False
-daemon_port: 27910
+daemon_port: 55510
 daemon_max_message_size: 50000000 # maximum size of RPC message in bytes
 inbound_rate_limit_percent: 100
 outbound_rate_limit_percent: 30
@@ -36,13 +36,13 @@ network_overrides: &network_overrides
   config:
     mainnet:
       address_prefix: "flo"
-      default_full_node_port: 27911
+      default_full_node_port: 55511
     testnet0:
       address_prefix: "tflo"
-      default_full_node_port: 28011
+      default_full_node_port: 55511
     testnet10:
       address_prefix: "tflo"
-      default_full_node_port: 28011
+      default_full_node_port: 55511
 
 selected_network: &selected_network "mainnet"
 ALERTS_URL: https://download.floteoblockchain.pl/notify/mainnet_alert.txt
@@ -77,9 +77,9 @@ logging: &logging
 
 seeder:
   # The fake full node used for crawling will run on this port.
-  port: 27911
+  port: 55511
   # Most full nodes on the network run on this port. (i.e. 27911 for mainnet, 28011 for testnet).
-  other_peers_port: 27911
+  other_peers_port: 55511
   # This will override the default full_node.peer_connect_timeout for the crawler full node
   peer_connect_timeout: 2
   # Path to crawler DB. If empty, will use $FLOTEO_ROOT/crawler.db
@@ -107,21 +107,21 @@ seeder:
   # Crawler is its own standalone service within the seeder component
   crawler:
     start_rpc_server: True
-    rpc_port: 27927
+    rpc_port: 55527
     ssl:
       private_crt: "config/ssl/crawler/private_crawler.crt"
       private_key: "config/ssl/crawler/private_crawler.key"
 
 harvester:
   # The harvester server (if run) will run on this port
-  port: 27915
+  port: 55515
   farmer_peer:
     host: *self_hostname
-    port: 27914
+    port: 55514
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 27925
+  rpc_port: 55525
   num_threads: 30
   plots_refresh_parameter:
     interval_seconds: 120 # The interval in seconds to refresh the plot file manager
@@ -163,14 +163,14 @@ pool:
 
 farmer:
   # The farmer server (if run) will run on this port
-  port: 27914
+  port: 55514
   # The farmer will attempt to connect to this full node and harvester
   full_node_peer:
     host: *self_hostname
-    port: 27911
+    port: 55511
   harvester_peer:
     host: *self_hostname
-    port: 27915
+    port: 55515
 
   pool_public_keys: []
 
@@ -179,7 +179,7 @@ farmer:
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 27924
+  rpc_port: 55524
 
   # To send a share to a pool, a proof of space must have required_iters less than this number
   pool_share_threshold: 1000
@@ -197,7 +197,7 @@ farmer:
 timelord_launcher:
   # The server where the VDF clients will connect to.
   host: *self_hostname
-  port: 27933
+  port: 55533
   # Number of VDF client processes to keep alive in the local machine.
   process_count: 3
   logging: *logging
@@ -205,7 +205,7 @@ timelord_launcher:
 
 timelord:
   # The timelord server (if run) will run on this port
-  port: 27913
+  port: 55513
   # Provides a list of VDF clients expected to connect to this timelord.
   # For each client, an IP is provided, together with the estimated iterations per second.
   vdf_clients:
@@ -217,13 +217,13 @@ timelord:
       - 150000
   full_node_peer:
       host: *self_hostname
-      port: 27911
+      port: 55511
   # Maximum number of seconds allowed for a client to reconnect to the server.
   max_connection_time: 60
   # The ip and port where the TCP clients will connect.
   vdf_server:
     host: *self_hostname
-    port: 27933
+    port: 55533
   logging: *logging
   network_overrides: *network_overrides
   selected_network: *selected_network
@@ -253,7 +253,7 @@ timelord:
   multiprocessing_start_method: default
 
   start_rpc_server: True
-  rpc_port: 27923
+  rpc_port: 55523
 
   ssl:
     private_crt:  "config/ssl/timelord/private_timelord.crt"
@@ -263,7 +263,7 @@ timelord:
 
 full_node:
   # The full node server (if run) will run on this port
-  port: 27911
+  port: 55511
 
   # controls the sync-to-disk behavior of the database connection. Can be one of:
   # "on"    enables syncing to disk, minimizes risk of corrupting the DB in
@@ -296,7 +296,7 @@ full_node:
 
   # If True, starts an RPC server at the following port
   start_rpc_server: True
-  rpc_port: 27921
+  rpc_port: 55521
 
   # Use UPnP to attempt to allow other full nodes to reach your node behind a gateway
   enable_upnp: True
@@ -362,16 +362,16 @@ full_node:
     - "dns-introducer.floteoblockchain.pl"
   farmer_peer:
       host: *self_hostname
-      port: 27914
+      port: 55514
   timelord_peer:
       host: *self_hostname
-      port: 27913
+      port: 55513
   introducer_peer:
       host: introducer.floteoblockchain.pl
-      port: 27912
+      port: 55512
   wallet_peer:
     host: *self_hostname
-    port: 27916
+    port: 55516
   logging: *logging
   network_overrides: *network_overrides
   selected_network: *selected_network
@@ -384,10 +384,10 @@ full_node:
 
 ui:
    # The ui node server (if run) will run on this port
-  port: 27980
+  port: 55580
 
   # Which port to use to communicate with the full node
-  rpc_port: 27921
+  rpc_port: 55521
 
   # This SSH key is for the ui SSH server
   ssh_filename: config/ssh_host_key
@@ -398,14 +398,14 @@ ui:
   # this is where the electron UI will find its daemon
   # defaults to the one running locally with its private keys
   daemon_host: *self_hostname
-  daemon_port: 27910
+  daemon_port: 55510
   daemon_ssl:
     private_crt: config/ssl/daemon/private_daemon.crt
     private_key: config/ssl/daemon/private_daemon.key
 
 introducer:
   host: *self_hostname
-  port: 27912
+  port: 55512
   max_peers_to_send: 20
   # The introducer will only return peers it has seen in the last
   # recent_peer_threshold seconds
@@ -419,8 +419,8 @@ introducer:
     public_key:  "config/ssl/full_node/public_full_node.key"
 
 wallet:
-  port: 27916
-  rpc_port: 27926
+  port: 55516
+  rpc_port: 55526
 
   enable_profiler: False
 
@@ -441,7 +441,7 @@ wallet:
 
   full_node_peer:
     host: *self_hostname
-    port: 27911
+    port: 55511
 
   multiprocessing_start_method: default
 
@@ -464,7 +464,7 @@ wallet:
 
   introducer_peer:
     host: introducer.floteoblockchain.pl
-    port: 27912
+    port: 55512
 
   ssl:
     private_crt:  "config/ssl/wallet/private_wallet.crt"

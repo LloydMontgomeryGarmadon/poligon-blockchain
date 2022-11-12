@@ -132,7 +132,7 @@ def configure(
 
             elif testnet == "false" or testnet == "f":
                 print("Setting Mainnet")
-                mainnet_port = "27911"
+                mainnet_port = "55511"
                 mainnet_introducer = "introducer.floteoblockchain.pl"
                 mainnet_dns_introducer = "dns-introducer.floteoblockchain.pl"
                 bootstrap_peers = ["node.floteoblockchain.pl"]
