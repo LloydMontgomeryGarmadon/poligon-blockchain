@@ -6,3 +6,6 @@
 	path = bpx-blockchain-gui
 	url = https://github.com/bpx-network/bpx-blockchain-gui.git
         branch = main
+[submodule "floteo-blockchain-gui"]
+	path = floteo-blockchain-gui
+	url = https://github.com/serwisgalena/floteo-blockchain-gui
