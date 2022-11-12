@@ -3,5 +3,5 @@
 
 set -e
 
-unlink /usr/bin/bpx || true
-unlink /opt/bpx || true
+unlink /usr/bin/floteo || true
+unlink /opt/floteo || true

@@ -5,11 +5,11 @@ set -o errexit -o nounset
 # If the env variable NOTARIZE and the username and password variables are
 # set, this will attempt to Notarize the signed DMG.
 
-if [ ! "$BPX_INSTALLER_VERSION" ]; then
-	echo "WARNING: No environment variable BPX_INSTALLER_VERSION set. Using 0.0.0."
-	BPX_INSTALLER_VERSION="0.0.0"
+if [ ! "$FLOTEO_INSTALLER_VERSION" ]; then
+	echo "WARNING: No environment variable FLOTEO_INSTALLER_VERSION set. Using 0.0.0."
+	FLOTEO_INSTALLER_VERSION="0.0.0"
 fi
-echo "BPX Installer Version is: $BPX_INSTALLER_VERSION"
+echo "Floteo Installer Version is: $FLOTEO_INSTALLER_VERSION"
 
 echo "Installing npm and electron packagers"
 cd npm_macos_m1 || exit
@@ -29,9 +29,9 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	echo >&2 "pyinstaller failed!"
 	exit $LAST_EXIT_CODE
 fi
-cp -r dist/daemon ../bpx-blockchain-gui/packages/gui
+cp -r dist/daemon ../floteo-blockchain-gui/packages/gui
 cd .. || exit
-cd bpx-blockchain-gui || exit
+cd floteo-blockchain-gui || exit
 
 echo "npm build"
 lerna clean -y
@@ -48,14 +48,14 @@ fi
 # Change to the gui package
 cd packages/gui || exit
 
-# sets the version for bpx-blockchain in package.json
+# sets the version for floteo-blockchain in package.json
 brew install jq
 cp package.json package.json.orig
-jq --arg VER "$BPX_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
+jq --arg VER "$FLOTEO_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
-electron-packager . BPX --asar.unpack="**/daemon/**" --platform=darwin \
---icon=src/assets/img/bpx.icns --overwrite --app-bundle-id=cc.bpxcoin.blockchain \
---appVersion=$BPX_INSTALLER_VERSION
+electron-packager . Floteo --asar.unpack="**/daemon/**" --platform=darwin \
+--icon=src/assets/img/floteo.icns --overwrite --app-bundle-id=pl.floteoblockchain.blockchain \
+--appVersion=$FLOTEO_INSTALLER_VERSION
 LAST_EXIT_CODE=$?
 
 # reset the package.json to the original
@@ -67,8 +67,8 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 fi
 
 if [ "$NOTARIZE" ]; then
-  electron-osx-sign BPX-darwin-arm64/BPX.app --platform=darwin \
-  --hardened-runtime=true --provisioning-profile=bpxblockchain.provisionprofile \
+  electron-osx-sign Floteo-darwin-arm64/Floteo.app --platform=darwin \
+  --hardened-runtime=true --provisioning-profile=floteoblockchain.provisionprofile \
   --entitlements=entitlements.mac.plist --entitlements-inherit=entitlements.mac.plist \
   --no-gatekeeper-assess
 fi
@@ -78,13 +78,13 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	exit $LAST_EXIT_CODE
 fi
 
-mv BPX-darwin-arm64 ../../../build_scripts/dist/
+mv Floteo-darwin-arm64 ../../../build_scripts/dist/
 cd ../../../build_scripts || exit
 
-DMG_NAME="BPX-$BPX_INSTALLER_VERSION-arm64.dmg"
+DMG_NAME="Floteo-$FLOTEO_INSTALLER_VERSION-arm64.dmg"
 echo "Create $DMG_NAME"
 mkdir final_installer
-NODE_PATH=./npm_macos_m1/node_modules node build_dmg.js dist/BPX-darwin-arm64/BPX.app $BPX_INSTALLER_VERSION-arm64
+NODE_PATH=./npm_macos_m1/node_modules node build_dmg.js dist/Floteo-darwin-arm64/Floteo.app $FLOTEO_INSTALLER_VERSION-arm64
 LAST_EXIT_CODE=$?
 if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	echo >&2 "electron-installer-dmg failed!"
@@ -96,7 +96,7 @@ ls -lh final_installer
 if [ "$NOTARIZE" ]; then
 	echo "Notarize $DMG_NAME on ci"
 	cd final_installer || exit
-  notarize-cli --file=$DMG_NAME --bundle-id cc.bpxcoin.blockchain \
+  notarize-cli --file=$DMG_NAME --bundle-id pl.floteoblockchain.blockchain \
 	--username "$APPLE_NOTARIZE_USERNAME" --password "$APPLE_NOTARIZE_PASSWORD"
   echo "Notarization step complete"
 else
@@ -107,7 +107,7 @@ fi
 #
 # Ask for username and password. password should be an app specific password.
 # Generate app specific password https://support.apple.com/en-us/HT204397
-# xcrun altool --notarize-app -f BPX-0.1.X.dmg --primary-bundle-id cc.bpxcoin.blockchain -u username -p password
+# xcrun altool --notarize-app -f Floteo-0.1.X.dmg --primary-bundle-id pl.floteoblockchain.blockchain -u username -p password
 # xcrun altool --notarize-app; -should return REQUEST-ID, use it in next command
 #
 # Wait until following command return a success message".
@@ -115,7 +115,7 @@ fi
 # It can take a while, run it every few minutes.
 #
 # Once that is successful, execute the following command":
-# xcrun stapler staple BPX-0.1.X.dmg
+# xcrun stapler staple Floteo-0.1.X.dmg
 #
 # Validate DMG:
-# xcrun stapler validate BPX-0.1.X.dmg
+# xcrun stapler validate Floteo-0.1.X.dmg

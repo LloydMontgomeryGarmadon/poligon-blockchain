@@ -97,7 +97,7 @@ class MempoolManager:
         self.lock = asyncio.Lock()
 
         # The fee per cost must be above this amount to consider the fee "nonzero", and thus able to kick out other
-        # transactions. This prevents spam. This is equivalent to 0.055 BPX per block, or about 0.00005 BPX for two
+        # transactions. This prevents spam. This is equivalent to 0.055 FLO per block, or about 0.00005 FLO for two
         # spends.
         self.nonzero_fee_minimum_fpc = 5
 
@@ -209,7 +209,7 @@ class MempoolManager:
 
     @staticmethod
     def get_min_fee_increase() -> int:
-        # 0.00001 BPX
+        # 0.00001 FLO
         return 10000000
 
     def can_replace(

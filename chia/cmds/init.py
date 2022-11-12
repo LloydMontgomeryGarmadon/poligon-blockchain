@@ -15,7 +15,7 @@ from chia.util.keychain import supports_keyring_passphrase
     is_flag=True,
     help="Attempt to fix SSL certificate/key file permissions",
 )
-@click.option("--testnet", is_flag=True, help="Configure this BPX install to connect to the testnet")
+@click.option("--testnet", is_flag=True, help="Configure this Floteo install to connect to the testnet")
 @click.option("--set-passphrase", "-s", is_flag=True, help="Protect your keyring with a passphrase")
 @click.option(
     "--v1-db",
@@ -29,9 +29,9 @@ def init_cmd(ctx: click.Context, create_certs: str, fix_ssl_permissions: bool, t
 
     \b
     Follow these steps to create new certificates for a remote harvester:
-    - Make a copy of your Farming Machine CA directory: ~/.bpx/[version]/config/ssl/ca
-    - Shut down all chia daemon processes with `bpx stop all -d`
-    - Run `bpx init -c [directory]` on your remote harvester,
+    - Make a copy of your Farming Machine CA directory: ~/.floteo/[version]/config/ssl/ca
+    - Shut down all chia daemon processes with `floteo stop all -d`
+    - Run `floteo init -c [directory]` on your remote harvester,
       where [directory] is the the copy of your Farming Machine CA directory
     - Get more details on remote harvester on Chia wiki:
       https://github.com/Chia-Network/chia-blockchain/wiki/Farming-on-many-machines

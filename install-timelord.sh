@@ -26,7 +26,7 @@ do
 done
 
 if [ -z "$VIRTUAL_ENV" ]; then
-  echo "This requires the BPX python virtual environment."
+  echo "This requires the Floteo python virtual environment."
   echo "Execute '. ./activate' before running."
 	exit 1
 fi

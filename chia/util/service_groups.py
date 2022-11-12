@@ -1,21 +1,21 @@
 from typing import KeysView, Generator
 
 SERVICES_FOR_GROUP = {
-    "all": "bpx_harvester bpx_timelord_launcher bpx_timelord bpx_farmer bpx_full_node bpx_wallet".split(),
-    "node": "bpx_full_node".split(),
-    "harvester": "bpx_harvester".split(),
-    "farmer": "bpx_harvester bpx_farmer bpx_full_node bpx_wallet".split(),
-    "farmer-no-wallet": "bpx_harvester bpx_farmer bpx_full_node".split(),
-    "farmer-only": "bpx_farmer".split(),
-    "timelord": "bpx_timelord_launcher bpx_timelord bpx_full_node".split(),
-    "timelord-only": "bpx_timelord".split(),
-    "timelord-launcher-only": "bpx_timelord_launcher".split(),
-    "wallet": "bpx_wallet".split(),
-    "introducer": "bpx_introducer".split(),
-    "simulator": "bpx_full_node_simulator".split(),
-    "crawler": "bpx_crawler".split(),
-    "seeder": "bpx_crawler bpx_seeder".split(),
-    "seeder-only": "bpx_seeder".split(),
+    "all": "floteo_harvester floteo_timelord_launcher floteo_timelord floteo_farmer floteo_full_node floteo_wallet".split(),
+    "node": "floteo_full_node".split(),
+    "harvester": "floteo_harvester".split(),
+    "farmer": "floteo_harvester floteo_farmer floteo_full_node floteo_wallet".split(),
+    "farmer-no-wallet": "floteo_harvester floteo_farmer floteo_full_node".split(),
+    "farmer-only": "floteo_farmer".split(),
+    "timelord": "floteo_timelord_launcher floteo_timelord floteo_full_node".split(),
+    "timelord-only": "floteo_timelord".split(),
+    "timelord-launcher-only": "floteo_timelord_launcher".split(),
+    "wallet": "floteo_wallet".split(),
+    "introducer": "floteo_introducer".split(),
+    "simulator": "floteo_full_node_simulator".split(),
+    "crawler": "floteo_crawler".split(),
+    "seeder": "floteo_crawler floteo_seeder".split(),
+    "seeder-only": "floteo_seeder".split(),
 }
 
 

@@ -3,5 +3,5 @@
 
 set -e
 
-ln -s /usr/lib/bpx-blockchain/resources/app.asar.unpacked/daemon/bpx /usr/bin/bpx || true
-ln -s /usr/lib/bpx-blockchain/resources/app.asar.unpacked/daemon /opt/bpx || true
+ln -s /usr/lib/floteo-blockchain/resources/app.asar.unpacked/daemon/floteo /usr/bin/floteo || true
+ln -s /usr/lib/floteo-blockchain/resources/app.asar.unpacked/daemon /opt/floteo || true

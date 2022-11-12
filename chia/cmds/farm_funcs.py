@@ -212,7 +212,7 @@ async def summary(
         print("Farming")
 
     if amounts is not None:
-        print(f"Total BPX farmed: {amounts['farmed_amount'] / units['chia']}")
+        print(f"Total FLO farmed: {amounts['farmed_amount'] / units['chia']}")
         print(f"User transaction fees: {amounts['fee_amount'] / units['chia']}")
         print(f"Block rewards: {(amounts['farmer_reward_amount'] + amounts['pool_reward_amount']) / units['chia']}")
         print(f"Last height farmed: {amounts['last_height_farmed']}")
@@ -273,8 +273,8 @@ async def summary(
 
     if amounts is None:
         if wallet_not_running:
-            print("For details on farmed rewards and fees you should run 'bpx start wallet' and 'bpx wallet show'")
+            print("For details on farmed rewards and fees you should run 'floteo start wallet' and 'floteo wallet show'")
         elif wallet_not_ready:
-            print("For details on farmed rewards and fees you should run 'bpx wallet show'")
+            print("For details on farmed rewards and fees you should run 'floteo wallet show'")
     else:
-        print("Note: log into your key using 'bpx wallet show' to see rewards for each key")
+        print("Note: log into your key using 'floteo wallet show' to see rewards for each key")

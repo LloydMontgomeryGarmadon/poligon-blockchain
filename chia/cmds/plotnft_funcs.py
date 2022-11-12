@@ -104,7 +104,7 @@ async def create(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -
                     print(transaction_status_msg(fingerprint, tx_record.name))
                     return None
         except Exception as e:
-            print(f"Error creating plot NFT: {e}\n    Please start both farmer and wallet with:  bpx start -r farmer")
+            print(f"Error creating plot NFT: {e}\n    Please start both farmer and wallet with:  floteo start -r farmer")
         return
     print("Aborting.")
 
@@ -186,7 +186,7 @@ async def show(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
         if isinstance(e, aiohttp.ClientConnectorError):
             print(
                 f"Connection error. Check if farmer is running at {farmer_rpc_port}."
-                f" You can run the farmer by:\n    bpx start farmer-only"
+                f" You can run the farmer by:\n    floteo start farmer-only"
             )
         else:
             print(f"Exception from 'wallet' {e}")
@@ -248,7 +248,7 @@ async def get_login_link(launcher_id_str: str) -> None:
         if isinstance(e, aiohttp.ClientConnectorError):
             print(
                 f"Connection error. Check if farmer is running at {farmer_rpc_port}."
-                f" You can run the farmer by:\n    bpx start farmer-only"
+                f" You can run the farmer by:\n    floteo start farmer-only"
             )
         else:
             print(f"Exception from 'farmer' {e}")

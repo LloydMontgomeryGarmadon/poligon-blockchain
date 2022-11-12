@@ -66,14 +66,14 @@ dev_dependencies = [
 ]
 
 kwargs = dict(
-    name="bpx-blockchain",
-    author="BPX",
-    author_email="hello@bpxcoin.cc",
-    description="BPX blockchain full node, farmer, timelord, and wallet.",
-    url="https://bpxcoin.cc/",
+    name="floteo-blockchain",
+    author="Kopalnie Krypto",
+    author_email="kontakt@kopalniekrypto.pl",
+    description="Floteo blockchain full node, farmer, timelord, and wallet.",
+    url="https://floteoblockchain.pl/",
     license="Apache License",
     python_requires=">=3.7, <4",
-    keywords="bpx blockchain node",
+    keywords="floteo blockchain node",
     install_requires=dependencies,
     extras_require=dict(
         uvloop=["uvloop"],
@@ -118,18 +118,18 @@ kwargs = dict(
     ],
     entry_points={
         "console_scripts": [
-            "bpx = chia.cmds.chia:main",
-            "bpx_daemon = chia.daemon.server:main",
-            "bpx_wallet = chia.server.start_wallet:main",
-            "bpx_full_node = chia.server.start_full_node:main",
-            "bpx_harvester = chia.server.start_harvester:main",
-            "bpx_farmer = chia.server.start_farmer:main",
-            "bpx_introducer = chia.server.start_introducer:main",
-            "bpx_crawler = chia.seeder.start_crawler:main",
-            "bpx_seeder = chia.seeder.dns_server:main",
-            "bpx_timelord = chia.server.start_timelord:main",
-            "bpx_timelord_launcher = chia.timelord.timelord_launcher:main",
-            "bpx_full_node_simulator = chia.simulator.start_simulator:main",
+            "floteo = chia.cmds.chia:main",
+            "floteo_daemon = chia.daemon.server:main",
+            "floteo_wallet = chia.server.start_wallet:main",
+            "floteo_full_node = chia.server.start_full_node:main",
+            "floteo_harvester = chia.server.start_harvester:main",
+            "floteo_farmer = chia.server.start_farmer:main",
+            "floteo_introducer = chia.server.start_introducer:main",
+            "floteo_crawler = chia.seeder.start_crawler:main",
+            "floteo_seeder = chia.seeder.dns_server:main",
+            "floteo_timelord = chia.server.start_timelord:main",
+            "floteo_timelord_launcher = chia.timelord.timelord_launcher:main",
+            "floteo_full_node_simulator = chia.simulator.start_simulator:main",
         ]
     },
     package_data={

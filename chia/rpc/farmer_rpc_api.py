@@ -67,7 +67,7 @@ def plot_matches_filter(plot: Plot, filter_item: FilterItem) -> bool:
 class FarmerRpcApi:
     def __init__(self, farmer: Farmer):
         self.service = farmer
-        self.service_name = "bpx_farmer"
+        self.service_name = "floteo_farmer"
 
     def get_routes(self) -> Dict[str, Callable]:
         return {

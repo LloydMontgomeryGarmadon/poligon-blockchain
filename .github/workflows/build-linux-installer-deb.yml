@@ -36,12 +36,12 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - uses: bpx-network/actions/git-ssh-to-https@main
+    - uses: serwisgalena/actions/git-ssh-to-https@main
 
     - name: Cleanup any leftovers that exist from previous runs
       run: bash build_scripts/clean-runner.sh || true
 
-    - uses: bpx-network/actions/enforce-semver@main
+    - uses: serwisgalena/actions/enforce-semver@main
       if: startsWith(github.ref, 'refs/tags/')
 
     - name: Setup Python environment
@@ -83,7 +83,7 @@ jobs:
         python3 -m venv ../venv
         . ../venv/bin/activate
         pip3 install setuptools_scm
-        echo "::set-output name=BPX_INSTALLER_VERSION::$(python3 ./build_scripts/installer-version.py)"
+        echo "::set-output name=FLOTEO_INSTALLER_VERSION::$(python3 ./build_scripts/installer-version.py)"
         deactivate
 
     - name: Test for secrets access
@@ -154,10 +154,10 @@ jobs:
 
     - name: Build .deb package
       env:
-        BPX_INSTALLER_VERSION: ${{ steps.version_number.outputs.BPX_INSTALLER_VERSION }}
+        FLOTEO_INSTALLER_VERSION: ${{ steps.version_number.outputs.FLOTEO_INSTALLER_VERSION }}
       run: |
         ldd --version
-        git -C ./bpx-blockchain-gui status
+        git -C ./floteo-blockchain-gui status
         . ./activate
         cd ./build_scripts
         sh build_linux_deb.sh amd64
@@ -165,5 +165,5 @@ jobs:
     - name: Upload Linux artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: bpx-installers-linux-deb-intel
+        name: floteo-installers-linux-deb-intel
         path: ${{ github.workspace }}/build_scripts/final_installer/

@@ -57,7 +57,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-service_plotter = "bpx_plotter"
+service_plotter = "floteo_plotter"
 
 
 async def fetch(url: str):
@@ -90,17 +90,17 @@ class PlotEvent(str, Enum):
 # determine if application is a script file or frozen exe
 if getattr(sys, "frozen", False):
     name_map = {
-        "bpx": "bpx",
-        "bpx_wallet": "start_wallet",
-        "bpx_full_node": "start_full_node",
-        "bpx_harvester": "start_harvester",
-        "bpx_farmer": "start_farmer",
-        "bpx_introducer": "start_introducer",
-        "bpx_timelord": "start_timelord",
-        "bpx_timelord_launcher": "timelord_launcher",
-        "bpx_full_node_simulator": "start_simulator",
-        "bpx_seeder": "start_seeder",
-        "bpx_crawler": "start_crawler",
+        "floteo": "floteo",
+        "floteo_wallet": "start_wallet",
+        "floteo_full_node": "start_full_node",
+        "floteo_harvester": "start_harvester",
+        "floteo_farmer": "start_farmer",
+        "floteo_introducer": "start_introducer",
+        "floteo_timelord": "start_timelord",
+        "floteo_timelord_launcher": "timelord_launcher",
+        "floteo_full_node_simulator": "start_simulator",
+        "floteo_seeder": "start_seeder",
+        "floteo_crawler": "start_crawler",
     }
 
     def executable_for_service(service_name: str) -> str:
@@ -420,7 +420,7 @@ class WebSocketServer:
                     else:
                         self.log.debug("Skipping legacy key migration (previously attempted).")
                 except Exception:
-                    self.log.exception("Failed to migrate keys silently. Run `bpx keys migrate` manually.")
+                    self.log.exception("Failed to migrate keys silently. Run `flo keys migrate` manually.")
 
                 # Inform the GUI of keyring status changes
                 self.keyring_status_changed(await self.keyring_status(), "wallet_ui")
@@ -847,7 +847,7 @@ class WebSocketServer:
 
     def _build_plotting_command_args(self, request: Any, ignoreCount: bool, index: int) -> List[str]:
         plotter: str = request.get("plotter", "chiapos")
-        command_args: List[str] = ["bpx", "plotters", plotter]
+        command_args: List[str] = ["floteo", "plotters", plotter]
 
         command_args.extend(self._common_plotting_command_args(request, ignoreCount))
 
@@ -1206,8 +1206,8 @@ def plotter_log_path(root_path: Path, id: str):
 
 
 def launch_plotter(root_path: Path, service_name: str, service_array: List[str], id: str):
-    # we need to pass on the possibly altered BPX_ROOT
-    os.environ["BPX_ROOT"] = str(root_path)
+    # we need to pass on the possibly altered FLOTEO_ROOT
+    os.environ["FLOTEO_ROOT"] = str(root_path)
     service_executable = executable_for_service(service_array[0])
 
     # Swap service name with name of executable
@@ -1256,21 +1256,21 @@ def launch_service(root_path: Path, service_command) -> Tuple[subprocess.Popen, 
     """
     Launch a child process.
     """
-    # set up BPX_ROOT
+    # set up FLOTEO_ROOT
     # invoke correct script
     # save away PID
 
-    # we need to pass on the possibly altered BPX_ROOT
-    os.environ["BPX_ROOT"] = str(root_path)
+    # we need to pass on the possibly altered FLOTEO_ROOT
+    os.environ["FLOTEO_ROOT"] = str(root_path)
 
-    log.debug(f"Launching service with BPX_ROOT: {os.environ['BPX_ROOT']}")
+    log.debug(f"Launching service with FLOTEO_ROOT: {os.environ['FLOTEO_ROOT']}")
 
     # Insert proper e
     service_array = service_command.split()
     service_executable = executable_for_service(service_array[0])
     service_array[0] = service_executable
 
-    if service_command == "bpx_full_node_simulator":
+    if service_command == "floteo_full_node_simulator":
         # Set the -D/--connect_to_daemon flag to signify that the child should connect
         # to the daemon to access the keychain
         service_array.append("-D")
@@ -1379,7 +1379,7 @@ async def async_run_daemon(root_path: Path, wait_for_unlock: bool = False) -> in
     # since it might be necessary to wait for the GUI to unlock the keyring first.
     chia_init(root_path, should_check_keys=(not wait_for_unlock))
     config = load_config(root_path, "config.yaml")
-    setproctitle("bpx_daemon")
+    setproctitle("floteo_daemon")
     initialize_logging("daemon", config["logging"], root_path)
     lockfile = singleton(daemon_launch_lock_path(root_path))
     crt_path = root_path / config["daemon_ssl"]["private_crt"]

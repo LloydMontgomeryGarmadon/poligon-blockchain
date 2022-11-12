@@ -13,7 +13,7 @@ if ($d)
 
 if ([Environment]::Is64BitOperatingSystem -eq $false)
 {
-    Write-Output "BPX requires a 64-bit Windows installation"
+    Write-Output "Floteo requires a 64-bit Windows installation"
     Exit 1
 }
 
@@ -107,8 +107,8 @@ venv\scripts\pip install --extra-index-url https://pypi.chia.net/simple/ miniupn
 venv\scripts\pip install --editable ".$extras_cli" --extra-index-url https://pypi.chia.net/simple/
 
 Write-Output ""
-Write-Output "BPX blockchain .\Install.ps1 complete."
+Write-Output "Floteo blockchain .\Install.ps1 complete."
 Write-Output ""
 Write-Output "To install the GUI type '.\Install-gui.ps1' after '.\venv\scripts\Activate.ps1'."
 Write-Output ""
-Write-Output "Type '.\venv\Scripts\Activate.ps1' and then 'bpx init' to begin."
+Write-Output "Type '.\venv\Scripts\Activate.ps1' and then 'floteo init' to begin."

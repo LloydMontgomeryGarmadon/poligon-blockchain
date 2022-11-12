@@ -8,4 +8,4 @@ extraction:
   javascript:
     index:
       include:
-        - bpx-blockchain-gui
+        - floteo-blockchain-gui

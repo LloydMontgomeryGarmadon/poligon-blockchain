@@ -74,7 +74,7 @@ class Service:
         # when we start this service as a component of an existing process,
         # don't change its proctitle
         if running_new_process:
-            proctitle_name = f"bpx_{service_name_prefix}{service_name}"
+            proctitle_name = f"floteo_{service_name_prefix}{service_name}"
             setproctitle(proctitle_name)
 
         self._log = logging.getLogger(service_name)
@@ -260,7 +260,7 @@ class Service:
 
         self._log.info("Waiting for socket to be closed (if opened)")
 
-        self._log.info("Waiting for BPX Server to be closed")
+        self._log.info("Waiting for Floteo Server to be closed")
         await self._server.await_closed()
 
         if self._rpc_close_task:
