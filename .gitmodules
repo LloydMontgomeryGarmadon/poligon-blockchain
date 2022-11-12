@@ -2,10 +2,6 @@
 	path = mozilla-ca
 	url = https://github.com/Chia-Network/mozilla-ca.git
         branch = main
-[submodule "bpx-blockchain-gui"]
-	path = bpx-blockchain-gui
-	url = https://github.com/bpx-network/bpx-blockchain-gui.git
-        branch = main
 [submodule "floteo-blockchain-gui"]
 	path = floteo-blockchain-gui
 	url = https://github.com/serwisgalena/floteo-blockchain-gui
