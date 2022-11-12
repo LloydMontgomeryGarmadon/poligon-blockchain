@@ -28,9 +28,9 @@ testnet_kwargs = {
     # Used as the initial cc rc challenges, as well as first block back pointers, and first SES back pointer
     # We override this value based on the chain being run (testnet0, testnet1, mainnet, etc)
     # Default used for tests is std_hash(b'')
-    "GENESIS_CHALLENGE": bytes.fromhex("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+    "GENESIS_CHALLENGE": bytes.fromhex("0b8d54d081025ad2ee617e0bd28ff90a34053a2c4335333c211513a4e8eb85c3"),
     # Forks of chia should change this value to provide replay attack protection. This is set to mainnet genesis chall
-    "AGG_SIG_ME_ADDITIONAL_DATA": bytes.fromhex("ac43cd6665c8c034621a22243e0c9b14d5441e6cd987f23a5201fb24537183d6"),
+    "AGG_SIG_ME_ADDITIONAL_DATA": bytes.fromhex("ba4f1cf623bc795737afb9166de26cd3c7ad52981675932bcfd0da90713074f8"),
     "GENESIS_PRE_FARM_POOL_PUZZLE_HASH": bytes.fromhex(
         "20364a37d68351cab14507bb712bdd3d3eb5774bb2dc40149fe191bc0eb54d32"
     ),
@@ -54,7 +54,7 @@ testnet_kwargs = {
     "MAX_GENERATOR_SIZE": 1000000,
     "MAX_GENERATOR_REF_LIST_SIZE": 512,  # Number of references allowed in the block generator ref list
     "POOL_SUB_SLOT_ITERS": 37600000000,  # iters limit * NUM_SPS
-    "SOFT_FORK_HEIGHT": 700000,
+    "SOFT_FORK_HEIGHT": 1,
 }
 
 
