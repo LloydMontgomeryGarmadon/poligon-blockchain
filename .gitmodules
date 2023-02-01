@@ -2,6 +2,3 @@
 	path = mozilla-ca
 	url = https://github.com/Chia-Network/mozilla-ca.git
         branch = main
-[submodule "poligon-blockchain-gui"]
-	path = poligon-blockchain-gui
-	url = https://github.com/serwisgalena/poligon-blockchain-gui
