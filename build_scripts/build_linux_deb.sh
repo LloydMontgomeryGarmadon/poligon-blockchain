@@ -7,22 +7,22 @@ if [ ! "$1" ]; then
 	exit 1
 elif [ "$1" = "amd64" ]; then
 	PLATFORM="$1"
-	DIR_NAME="floteo-blockchain-linux-x64"
+	DIR_NAME="poligon-blockchain-linux-x64"
 else
 	PLATFORM="$1"
-	DIR_NAME="floteo-blockchain-linux-arm64"
+	DIR_NAME="poligon-blockchain-linux-arm64"
 fi
 export PLATFORM
 
 # If the env variable NOTARIZE and the username and password variables are
 # set, this will attempt to Notarize the signed DMG
 
-if [ ! "$FLOTEO_INSTALLER_VERSION" ]; then
-	echo "WARNING: No environment variable FLOTEO_INSTALLER_VERSION set. Using 0.0.0."
-	FLOTEO_INSTALLER_VERSION="0.0.0"
+if [ ! "$POLIGON_INSTALLER_VERSION" ]; then
+	echo "WARNING: No environment variable POLIGON_INSTALLER_VERSION set. Using 0.0.0."
+	POLIGON_INSTALLER_VERSION="0.0.0"
 fi
-echo "Floteo Installer Version is: $FLOTEO_INSTALLER_VERSION"
-export FLOTEO_INSTALLER_VERSION
+echo "Poligon Installer Version is: $POLIGON_INSTALLER_VERSION"
+export POLIGON_INSTALLER_VERSION
 
 echo "Installing npm and electron packagers"
 cd npm_linux_deb || exit
@@ -46,19 +46,19 @@ fi
 # Builds CLI only .deb
 # need j2 for templating the control file
 pip install j2cli
-CLI_DEB_BASE="floteo-blockchain-cli_$FLOTEO_INSTALLER_VERSION-1_$PLATFORM"
-mkdir -p "dist/$CLI_DEB_BASE/opt/floteo"
+CLI_DEB_BASE="poligon-blockchain-cli_$POLIGON_INSTALLER_VERSION-1_$PLATFORM"
+mkdir -p "dist/$CLI_DEB_BASE/opt/poligon"
 mkdir -p "dist/$CLI_DEB_BASE/usr/bin"
 mkdir -p "dist/$CLI_DEB_BASE/DEBIAN"
 j2 -o "dist/$CLI_DEB_BASE/DEBIAN/control" assets/deb/control.j2
-cp -r dist/daemon/* "dist/$CLI_DEB_BASE/opt/floteo/"
-ln -s ../../opt/floteo/floteo "dist/$CLI_DEB_BASE/usr/bin/floteo"
+cp -r dist/daemon/* "dist/$CLI_DEB_BASE/opt/poligon/"
+ln -s ../../opt/poligon/poligon "dist/$CLI_DEB_BASE/usr/bin/poligon"
 dpkg-deb --build --root-owner-group "dist/$CLI_DEB_BASE"
 # CLI only .deb done
 
-cp -r dist/daemon ../floteo-blockchain-gui/packages/gui
+cp -r dist/daemon ../poligon-blockchain-gui/packages/gui
 cd .. || exit
-cd floteo-blockchain-gui || exit
+cd poligon-blockchain-gui || exit
 
 echo "npm build"
 lerna clean -y
@@ -75,13 +75,13 @@ fi
 # Change to the gui package
 cd packages/gui || exit
 
-# sets the version for floteo-blockchain in package.json
+# sets the version for poligon-blockchain in package.json
 cp package.json package.json.orig
-jq --arg VER "$FLOTEO_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
+jq --arg VER "$POLIGON_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
-electron-packager . floteo-blockchain --asar.unpack="**/daemon/**" --platform=linux \
---icon=src/assets/img/floteo.icns --overwrite --app-bundle-id=pl.floteoblockchain.blockchain \
---appVersion=$FLOTEO_INSTALLER_VERSION --executable-name=floteo-blockchain
+electron-packager . poligon-blockchain --asar.unpack="**/daemon/**" --platform=linux \
+--icon=src/assets/img/poligon.icns --overwrite --app-bundle-id=pl.poligonblockchain.blockchain \
+--appVersion=$POLIGON_INSTALLER_VERSION --executable-name=poligon-blockchain
 LAST_EXIT_CODE=$?
 
 # reset the package.json to the original
@@ -95,12 +95,12 @@ fi
 mv $DIR_NAME ../../../build_scripts/dist/
 cd ../../../build_scripts || exit
 
-echo "Create floteo-$FLOTEO_INSTALLER_VERSION.deb"
+echo "Create poligon-$POLIGON_INSTALLER_VERSION.deb"
 rm -rf final_installer
 mkdir final_installer
 electron-installer-debian --src "dist/$DIR_NAME/" \
   --arch "$PLATFORM" \
-  --options.version "$FLOTEO_INSTALLER_VERSION" \
+  --options.version "$POLIGON_INSTALLER_VERSION" \
   --config deb-options.json
 LAST_EXIT_CODE=$?
 if [ "$LAST_EXIT_CODE" -ne 0 ]; then

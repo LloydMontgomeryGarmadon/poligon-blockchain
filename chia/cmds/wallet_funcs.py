@@ -243,7 +243,7 @@ async def send(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> 
             return None
 
     print("Transaction not yet submitted to nodes")
-    print(f"Do 'floteo wallet get_transaction -f {fingerprint} -tx 0x{tx_id}' to get status")
+    print(f"Do 'poligon wallet get_transaction -f {fingerprint} -tx 0x{tx_id}' to get status")
 
 
 async def get_address(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
@@ -351,7 +351,7 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
                 except ValueError:
                     id = uint32(int(name))
                     if id == 1:
-                        name = "FLO"
+                        name = "POL"
                         unit = units["chia"]
                     else:
                         name = await wallet_client.get_cat_name(str(id))
@@ -398,7 +398,7 @@ async def make_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
                     with open(pathlib.Path(filepath), "w") as file:
                         file.write(offer.to_bech32())
                     print(f"Created offer with ID {trade_record.trade_id}")
-                    print(f"Use floteo wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view status")
+                    print(f"Use poligon wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view status")
                 else:
                     print("Error creating offer")
 
@@ -411,10 +411,10 @@ async def print_offer_summary(cat_name_resolver: CATNameResolver, sum_dict: Dict
     for asset_id, amount in sum_dict.items():
         description: str = ""
         unit: int = units["chia"]
-        wid: str = "1" if asset_id == "flo" else ""
+        wid: str = "1" if asset_id == "pol" else ""
         mojo_amount: int = int(Decimal(amount))
-        name: str = "FLO"
-        if asset_id != "flo":
+        name: str = "POL"
+        if asset_id != "pol":
             name = asset_id
             if asset_id == "unknown":
                 name = "Unknown"
@@ -549,14 +549,14 @@ async def take_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
             offered, requested, nft_coin_id, nft_royalty_percentage
         )
         nft_royalty_currency: str = "Unknown token"
-        if nft_royalty_asset_id == "flo":
-            nft_royalty_currency = "FLO"
+        if nft_royalty_asset_id == "pol":
+            nft_royalty_currency = "POL"
         else:
             result = await cat_name_resolver(bytes32.fromhex(nft_royalty_asset_id))
             if result is not None:
                 nft_royalty_currency = result[1]
 
-        nft_royalty_divisor = units["chia"] if nft_royalty_asset_id == "flo" else units["cat"]
+        nft_royalty_divisor = units["chia"] if nft_royalty_asset_id == "pol" else units["cat"]
         nft_total_amount_requested_str = (
             f"{Decimal(nft_total_amount_requested) / nft_royalty_divisor} {nft_royalty_currency}"
         )
@@ -576,7 +576,7 @@ async def take_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: in
         if confirmation in ["y", "yes"]:
             trade_record = await wallet_client.take_offer(offer, fee=fee)
             print(f"Accepted offer with ID {trade_record.trade_id}")
-            print(f"Use floteo wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view its status")
+            print(f"Use poligon wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view its status")
 
 
 async def cancel_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: int) -> None:
@@ -592,7 +592,7 @@ async def cancel_offer(args: dict, wallet_client: WalletRpcClient, fingerprint: 
         await wallet_client.cancel_offer(id, secure=secure, fee=fee)
         print(f"Cancelled offer with ID {trade_record.trade_id}")
         if secure:
-            print(f"Use floteo wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view cancel status")
+            print(f"Use poligon wallet get_offers --id {trade_record.trade_id} -f {fingerprint} to view cancel status")
 
 
 def wallet_coin_unit(typ: WalletType, address_prefix: str) -> Tuple[str, int]:
@@ -680,7 +680,7 @@ async def get_wallet(wallet_client: WalletRpcClient, fingerprint: int = None) ->
     else:
         fingerprints = await wallet_client.get_public_keys()
     if len(fingerprints) == 0:
-        print("No keys loaded. Run 'flo keys generate' or import a key")
+        print("No keys loaded. Run 'pol keys generate' or import a key")
         return None
     if len(fingerprints) == 1:
         fingerprint = fingerprints[0]
@@ -757,7 +757,7 @@ async def execute_with_wallet(
         if isinstance(e, aiohttp.ClientConnectorError):
             print(
                 f"Connection error. Check if the wallet is running at {wallet_rpc_port}. "
-                "You can run the wallet via:\n\TFLO start wallet"
+                "You can run the wallet via:\n\TPOL start wallet"
             )
         else:
             print(f"Exception from 'wallet' {e}")

@@ -8,20 +8,20 @@ if [ ! "$1" ]; then
 elif [ "$1" = "amd64" ]; then
 	#PLATFORM="$1"
 	REDHAT_PLATFORM="x86_64"
-	DIR_NAME="floteo-blockchain-linux-x64"
+	DIR_NAME="poligon-blockchain-linux-x64"
 else
 	#PLATFORM="$1"
-	DIR_NAME="floteo-blockchain-linux-arm64"
+	DIR_NAME="poligon-blockchain-linux-arm64"
 fi
 
 # If the env variable NOTARIZE and the username and password variables are
 # set, this will attempt to Notarize the signed DMG
 
-if [ ! "$FLOTEO_INSTALLER_VERSION" ]; then
-	echo "WARNING: No environment variable FLOTEO_INSTALLER_VERSION set. Using 0.0.0."
-	FLOTEO_INSTALLER_VERSION="0.0.0"
+if [ ! "$POLIGON_INSTALLER_VERSION" ]; then
+	echo "WARNING: No environment variable POLIGON_INSTALLER_VERSION set. Using 0.0.0."
+	POLIGON_INSTALLER_VERSION="0.0.0"
 fi
-echo "Floteo Installer Version is: $FLOTEO_INSTALLER_VERSION"
+echo "Poligon Installer Version is: $POLIGON_INSTALLER_VERSION"
 
 echo "Installing npm and electron packagers"
 cd npm_linux_rpm || exit
@@ -44,11 +44,11 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 fi
 
 # Builds CLI only rpm
-CLI_RPM_BASE="floteo-blockchain-cli-$FLOTEO_INSTALLER_VERSION-1.$REDHAT_PLATFORM"
-mkdir -p "dist/$CLI_RPM_BASE/opt/floteo"
+CLI_RPM_BASE="poligon-blockchain-cli-$POLIGON_INSTALLER_VERSION-1.$REDHAT_PLATFORM"
+mkdir -p "dist/$CLI_RPM_BASE/opt/poligon"
 mkdir -p "dist/$CLI_RPM_BASE/usr/bin"
-cp -r dist/daemon/* "dist/$CLI_RPM_BASE/opt/floteo/"
-ln -s ../../opt/floteo/floteo "dist/$CLI_RPM_BASE/usr/bin/floteo"
+cp -r dist/daemon/* "dist/$CLI_RPM_BASE/opt/poligon/"
+ln -s ../../opt/poligon/poligon "dist/$CLI_RPM_BASE/usr/bin/poligon"
 # This is built into the base build image
 # shellcheck disable=SC1091
 . /etc/profile.d/rvm.sh
@@ -59,18 +59,18 @@ rvm use ruby-3
 fpm -s dir -t rpm \
   -C "dist/$CLI_RPM_BASE" \
   -p "dist/$CLI_RPM_BASE.rpm" \
-  --name floteo-blockchain-cli \
+  --name poligon-blockchain-cli \
   --license Apache-2.0 \
-  --version "$FLOTEO_INSTALLER_VERSION" \
+  --version "$POLIGON_INSTALLER_VERSION" \
   --architecture "$REDHAT_PLATFORM" \
-  --description "Floteo Blockchain" \
+  --description "Poligon Blockchain" \
   --depends /usr/lib64/libcrypt.so.1 \
   .
 # CLI only rpm done
 
-cp -r dist/daemon ../floteo-blockchain-gui/packages/gui
+cp -r dist/daemon ../poligon-blockchain-gui/packages/gui
 cd .. || exit
-cd floteo-blockchain-gui || exit
+cd poligon-blockchain-gui || exit
 
 echo "npm build"
 lerna clean -y
@@ -87,13 +87,13 @@ fi
 # Change to the gui package
 cd packages/gui || exit
 
-# sets the version for floteo-blockchain in package.json
+# sets the version for poligon-blockchain in package.json
 cp package.json package.json.orig
-jq --arg VER "$FLOTEO_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
+jq --arg VER "$POLIGON_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
-electron-packager . floteo-blockchain --asar.unpack="**/daemon/**" --platform=linux \
---icon=src/assets/img/floteo.icns --overwrite --app-bundle-id=pl.floteoblockchain.blockchain \
---appVersion=$FLOTEO_INSTALLER_VERSION --executable-name=floteo-blockchain
+electron-packager . poligon-blockchain --asar.unpack="**/daemon/**" --platform=linux \
+--icon=src/assets/img/poligon.icns --overwrite --app-bundle-id=pl.poligonblockchain.blockchain \
+--appVersion=$POLIGON_INSTALLER_VERSION --executable-name=poligon-blockchain
 LAST_EXIT_CODE=$?
 
 # reset the package.json to the original
@@ -108,7 +108,7 @@ mv $DIR_NAME ../../../build_scripts/dist/
 cd ../../../build_scripts || exit
 
 if [ "$REDHAT_PLATFORM" = "x86_64" ]; then
-	echo "Create floteo-blockchain-$FLOTEO_INSTALLER_VERSION.rpm"
+	echo "Create poligon-blockchain-$POLIGON_INSTALLER_VERSION.rpm"
 
 	# Disables build links from the generated rpm so that we dont conflict with other packages. See https://github.com/Chia-Network/chia-blockchain/issues/3846
 	# shellcheck disable=SC2086
@@ -125,8 +125,8 @@ if [ "$REDHAT_PLATFORM" = "x86_64" ]; then
 	sed -i "s#throw new Error('Please upgrade to RPM 4.13.*#console.warn('You are using RPM < 4.13')\n      return { requires: [ 'gtk3', 'libnotify', 'nss', 'libXScrnSaver', 'libXtst', 'xdg-utils', 'at-spi2-core', 'libdrm', 'mesa-libgbm', 'libxcb' ] }#g" $GLOBAL_NPM_ROOT/electron-installer-redhat/src/dependencies.js
 
   electron-installer-redhat --src dist/$DIR_NAME/ --dest final_installer/ \
-  --arch "$REDHAT_PLATFORM" --options.version $FLOTEO_INSTALLER_VERSION \
-  --license ../LICENSE --options.bin floteo-blockchain --options.name floteo-blockchain
+  --arch "$REDHAT_PLATFORM" --options.version $POLIGON_INSTALLER_VERSION \
+  --license ../LICENSE --options.bin poligon-blockchain --options.name poligon-blockchain
   LAST_EXIT_CODE=$?
   if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	  echo >&2 "electron-installer-redhat failed!"

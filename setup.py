@@ -66,14 +66,14 @@ dev_dependencies = [
 ]
 
 kwargs = dict(
-    name="floteo-blockchain",
+    name="poligon-blockchain",
     author="Kopalnie Krypto",
     author_email="kontakt@kopalniekrypto.pl",
-    description="Floteo blockchain full node, farmer, timelord, and wallet.",
-    url="https://floteoblockchain.pl/",
+    description="Poligon blockchain full node, farmer, timelord, and wallet.",
+    url="https://poligonblockchain.pl/",
     license="Apache License",
     python_requires=">=3.7, <4",
-    keywords="floteo blockchain node",
+    keywords="poligon blockchain node",
     install_requires=dependencies,
     extras_require=dict(
         uvloop=["uvloop"],
@@ -118,18 +118,18 @@ kwargs = dict(
     ],
     entry_points={
         "console_scripts": [
-            "floteo = chia.cmds.chia:main",
-            "floteo_daemon = chia.daemon.server:main",
-            "floteo_wallet = chia.server.start_wallet:main",
-            "floteo_full_node = chia.server.start_full_node:main",
-            "floteo_harvester = chia.server.start_harvester:main",
-            "floteo_farmer = chia.server.start_farmer:main",
-            "floteo_introducer = chia.server.start_introducer:main",
-            "floteo_crawler = chia.seeder.start_crawler:main",
-            "floteo_seeder = chia.seeder.dns_server:main",
-            "floteo_timelord = chia.server.start_timelord:main",
-            "floteo_timelord_launcher = chia.timelord.timelord_launcher:main",
-            "floteo_full_node_simulator = chia.simulator.start_simulator:main",
+            "poligon = chia.cmds.chia:main",
+            "poligon_daemon = chia.daemon.server:main",
+            "poligon_wallet = chia.server.start_wallet:main",
+            "poligon_full_node = chia.server.start_full_node:main",
+            "poligon_harvester = chia.server.start_harvester:main",
+            "poligon_farmer = chia.server.start_farmer:main",
+            "poligon_introducer = chia.server.start_introducer:main",
+            "poligon_crawler = chia.seeder.start_crawler:main",
+            "poligon_seeder = chia.seeder.dns_server:main",
+            "poligon_timelord = chia.server.start_timelord:main",
+            "poligon_timelord_launcher = chia.timelord.timelord_launcher:main",
+            "poligon_full_node_simulator = chia.simulator.start_simulator:main",
         ]
     },
     package_data={

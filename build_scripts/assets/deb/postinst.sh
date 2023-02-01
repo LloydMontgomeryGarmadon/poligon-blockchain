@@ -3,5 +3,5 @@
 
 set -e
 
-ln -s /usr/lib/floteo-blockchain/resources/app.asar.unpacked/daemon/floteo /usr/bin/floteo || true
-ln -s /usr/lib/floteo-blockchain/resources/app.asar.unpacked/daemon /opt/floteo || true
+ln -s /usr/lib/poligon-blockchain/resources/app.asar.unpacked/daemon/poligon /usr/bin/poligon || true
+ln -s /usr/lib/poligon-blockchain/resources/app.asar.unpacked/daemon /opt/poligon || true

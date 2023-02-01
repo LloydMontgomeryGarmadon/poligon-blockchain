@@ -121,7 +121,7 @@ def get_transactions_cmd(
     sys.stdout.close()
 
 
-@wallet_cmd.command("send", short_help="Send FLO to another wallet")
+@wallet_cmd.command("send", short_help="Send POL to another wallet")
 @click.option(
     "-wp",
     "--wallet-rpc-port",
@@ -131,25 +131,25 @@ def get_transactions_cmd(
 )
 @click.option("-f", "--fingerprint", help="Set the fingerprint to specify which wallet to use", type=int)
 @click.option("-i", "--id", help="Id of the wallet to use", type=int, default=1, show_default=True, required=True)
-@click.option("-a", "--amount", help="How much FLO to send", type=str, required=True)
+@click.option("-a", "--amount", help="How much POL to send", type=str, required=True)
 @click.option("-e", "--memo", help="Additional memo for the transaction", type=str, default=None)
 @click.option(
     "-m",
     "--fee",
-    help="Set the fees for the transaction, in FLO",
+    help="Set the fees for the transaction, in POL",
     type=str,
     default="0",
     show_default=True,
     required=True,
 )
-@click.option("-t", "--address", help="Address to send the FLO", type=str, required=True)
+@click.option("-t", "--address", help="Address to send the POL", type=str, required=True)
 @click.option(
     "-o", "--override", help="Submits transaction without checking for unusual values", is_flag=True, default=False
 )
 @click.option(
     "-ma",
     "--min_coin_amount",
-    help="Ignore coins worth less then this much FLO or token units",
+    help="Ignore coins worth less then this much POL or token units",
     type=str,
     required=False,
     default="0",
@@ -327,7 +327,7 @@ def add_token_cmd(wallet_rpc_port: Optional[int], asset_id: str, token_name: str
     asyncio.run(execute_with_wallet(wallet_rpc_port, fingerprint, extra_params, add_token))
 
 
-@wallet_cmd.command("make_offer", short_help="Create an offer of FLO/tokens for FLO/tokens")
+@wallet_cmd.command("make_offer", short_help="Create an offer of POL/tokens for POL/tokens")
 @click.option(
     "-wp",
     "--wallet-rpc-port",

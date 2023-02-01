@@ -90,7 +90,7 @@ jobs:
       uses: kitek/decode-base64-into-file-action@1.0
       with:
         encoded-value: ${{ secrets.WIN_CODE_SIGN_CERT }}
-        destination-file: .\floteo-blockchain-gui\win_code_sign_cert.p12
+        destination-file: .\poligon-blockchain-gui\win_code_sign_cert.p12
 
     # Create our own venv outside of the git directory JUST for getting the ACTUAL version so that install can't break it
     - name: Get version number
@@ -99,9 +99,9 @@ jobs:
         python -m venv ..\venv
         . ..\venv\Scripts\Activate.ps1
         pip3 install setuptools_scm
-        $env:FLOTEO_INSTALLER_VERSION = python .\build_scripts\installer-version.py -win
-        echo "$env:FLOTEO_INSTALLER_VERSION"
-        echo "::set-output name=FLOTEO_INSTALLER_VERSION::$env:FLOTEO_INSTALLER_VERSION"
+        $env:POLIGON_INSTALLER_VERSION = python .\build_scripts\installer-version.py -win
+        echo "$env:POLIGON_INSTALLER_VERSION"
+        echo "::set-output name=POLIGON_INSTALLER_VERSION::$env:POLIGON_INSTALLER_VERSION"
         deactivate
 
       # Get the most recent release from chia-plotter-madmax
@@ -151,13 +151,13 @@ jobs:
 
     - name: Build Windows installer with build_scripts\build_windows.ps1
       env:
-        FLOTEO_INSTALLER_VERSION: ${{ steps.version_number.outputs.FLOTEO_INSTALLER_VERSION }}
+        POLIGON_INSTALLER_VERSION: ${{ steps.version_number.outputs.POLIGON_INSTALLER_VERSION }}
         WIN_CODE_SIGN_PASS: ${{ secrets.WIN_CODE_SIGN_PASS }}
         HAS_SECRET: ${{ steps.check_secrets.outputs.HAS_SIGNING_SECRET }}
       run: |
         $env:path="C:\Program` Files` (x86)\Microsoft` Visual` Studio\2019\Enterprise\SDK\ScopeCppSDK\vc15\VC\bin\;$env:path"
         $env:path="C:\Program` Files` (x86)\Windows` Kits\10\App` Certification` Kit;$env:path"
-        git -C .\floteo-blockchain-gui status
+        git -C .\poligon-blockchain-gui status
         .\venv\Scripts\Activate.ps1
         cd .\build_scripts
         .\build_windows.ps1
@@ -166,10 +166,10 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Windows-Exe
-        path: ${{ github.workspace }}\floteo-blockchain-gui\Floteo-win32-x64\
+        path: ${{ github.workspace }}\poligon-blockchain-gui\Poligon-win32-x64\
 
     - name: Upload Installer to artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: floteo-installers-windows-exe-intel
-        path: ${{ github.workspace }}\floteo-blockchain-gui\release-builds\
+        name: poligon-installers-windows-exe-intel
+        path: ${{ github.workspace }}\poligon-blockchain-gui\release-builds\

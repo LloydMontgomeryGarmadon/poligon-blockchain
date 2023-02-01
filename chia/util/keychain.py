@@ -16,8 +16,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 CURRENT_KEY_VERSION = "1.8"
-DEFAULT_USER = f"user-floteo-{CURRENT_KEY_VERSION}"  # e.g. user-floteo-1.8
-DEFAULT_SERVICE = f"floteo-{DEFAULT_USER}"  # e.g. floteo-user-floteo-1.8
+DEFAULT_USER = f"user-poligon-{CURRENT_KEY_VERSION}"  # e.g. user-poligon-1.8
+DEFAULT_SERVICE = f"poligon-{DEFAULT_USER}"  # e.g. poligon-user-poligon-1.8
 DEFAULT_PASSPHRASE_PROMPT = (
     colorama.Fore.YELLOW + colorama.Style.BRIGHT + "(Unlock Keyring)" + colorama.Style.RESET_ALL + " Passphrase: "
 )  # noqa: E501
@@ -49,7 +49,7 @@ class KeyringNotSet(Exception):
 
 def supports_keyring_passphrase() -> bool:
     # Support can be disabled by setting CHIA_PASSPHRASE_SUPPORT to 0/false
-    return os.environ.get("FLOTEO_PASSPHRASE_SUPPORT", "true").lower() in ["1", "true"]
+    return os.environ.get("POLIGON_PASSPHRASE_SUPPORT", "true").lower() in ["1", "true"]
 
 
 def supports_os_passphrase_storage() -> bool:

@@ -127,7 +127,7 @@ async def show_async(
                 print(f"Current Blockchain Status: Not Synced. Peak height: {peak.height}")
             else:
                 print("\nSearching for an initial chain\n")
-                print("You may be able to expedite with 'floteo show -a host:port' using a known node.\n")
+                print("You may be able to expedite with 'poligon show -a host:port' using a known node.\n")
 
             if peak is not None:
                 if peak.is_transaction_block:

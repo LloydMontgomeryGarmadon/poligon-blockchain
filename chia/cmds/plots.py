@@ -17,9 +17,9 @@ def show_plots(root_path: Path):
     print("Directories where plots are being searched for:")
     print("Note that subdirectories must be added manually")
     print(
-        "Add with 'floteo plots add -d [dir]' and remove with"
-        + " 'floteo plots remove -d [dir]'"
-        + " Scan and check plots with 'floteo plots check'"
+        "Add with 'poligon plots add -d [dir]' and remove with"
+        + " 'poligon plots remove -d [dir]'"
+        + " Scan and check plots with 'poligon plots check'"
     )
     print()
     for str_path in get_plot_directories(root_path):
@@ -34,7 +34,7 @@ def plots_cmd(ctx: click.Context):
 
     root_path: Path = ctx.obj["root_path"]
     if not root_path.is_dir():
-        raise RuntimeError("Please initialize (or migrate) your config directory with 'floteo init'")
+        raise RuntimeError("Please initialize (or migrate) your config directory with 'poligon init'")
     initialize_logging("", {"log_stdout": True}, root_path)
 
 

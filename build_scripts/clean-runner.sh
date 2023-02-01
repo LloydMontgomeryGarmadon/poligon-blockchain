@@ -7,15 +7,15 @@ PWD=$(pwd)
 
 rm -rf ../venv || true
 rm -rf venv || true
-rm -rf floteo_blockchain.egg-info || true
+rm -rf poligon_blockchain.egg-info || true
 rm -rf build_scripts/final_installer || true
 rm -rf build_scripts/dist || true
 rm -rf build_scripts/pyinstaller || true
-rm -rf floteo-blockchain-gui/build || true
-rm -rf floteo-blockchain-gui/daemon || true
-rm -rf floteo-blockchain-gui/node_modules || true
-rm floteo-blockchain-gui/temp.json || true
-( cd "$PWD/floteo-blockchain-gui" && git checkout HEAD -- package-lock.json ) || true
+rm -rf poligon-blockchain-gui/build || true
+rm -rf poligon-blockchain-gui/daemon || true
+rm -rf poligon-blockchain-gui/node_modules || true
+rm poligon-blockchain-gui/temp.json || true
+( cd "$PWD/poligon-blockchain-gui" && git checkout HEAD -- package-lock.json ) || true
 cd "$PWD" || true
 
 # Clean up old globally installed node_modules that might conflict with the current build

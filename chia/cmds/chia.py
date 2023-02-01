@@ -47,8 +47,8 @@ def monkey_patch_click() -> None:
 
 
 @click.group(
-    help=f"\n  Manage Floteo blockchain infrastructure ({__version__})\n",
-    epilog="Try 'floteo start node', 'floteo netspace -d 192', or 'floteo show -s'",
+    help=f"\n  Manage Poligon blockchain infrastructure ({__version__})\n",
+    epilog="Try 'poligon start node', 'poligon netspace -d 192', or 'poligon show -s'",
     context_settings=CONTEXT_SETTINGS,
 )
 @click.option("--root-path", default=DEFAULT_ROOT_PATH, help="Config file root", type=click.Path(), show_default=True)
@@ -102,18 +102,18 @@ if not supports_keyring_passphrase():
     remove_passphrase_options_from_cmd(cli)
 
 
-@cli.command("version", short_help="Show Floteo version")
+@cli.command("version", short_help="Show Poligon version")
 def version_cmd() -> None:
     print(__version__)
 
 
-@cli.command("run_daemon", short_help="Runs Floteo daemon")
+@cli.command("run_daemon", short_help="Runs Poligon daemon")
 @click.option(
     "--wait-for-unlock",
     help="If the keyring is passphrase-protected, the daemon will wait for an unlock command before accessing keys",
     default=False,
     is_flag=True,
-    hidden=True,  # --wait-for-unlock is only set when launched by floteo start <service>
+    hidden=True,  # --wait-for-unlock is only set when launched by poligon start <service>
 )
 @click.pass_context
 def run_daemon_cmd(ctx: click.Context, wait_for_unlock: bool) -> None:

@@ -3,5 +3,5 @@
 
 set -e
 
-unlink /usr/bin/floteo || true
-unlink /opt/floteo || true
+unlink /usr/bin/poligon || true
+unlink /opt/poligon || true

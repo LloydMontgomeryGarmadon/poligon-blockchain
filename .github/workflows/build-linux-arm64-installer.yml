@@ -29,10 +29,10 @@ jobs:
         python-version: [3.8]
 
     steps:
-    - uses: floteo-network/actions/clean-workspace@main
+    - uses: poligon-network/actions/clean-workspace@main
 
     - name: Add safe git directory
-      uses: floteo-network/actions/git-mark-workspace-safe@main
+      uses: poligon-network/actions/git-mark-workspace-safe@main
 
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - uses: floteo-network/actions/git-ssh-to-https@main
+    - uses: poligon-network/actions/git-ssh-to-https@main
 
     - name: Cleanup any leftovers that exist from previous runs
       run: bash build_scripts/clean-runner.sh || true
@@ -52,7 +52,7 @@ jobs:
         python3 -m venv ../venv
         . ../venv/bin/activate
         pip3 install setuptools_scm
-        echo "::set-output name=FLOTEO_INSTALLER_VERSION::$(python3 ./build_scripts/installer-version.py)"
+        echo "::set-output name=POLIGON_INSTALLER_VERSION::$(python3 ./build_scripts/installer-version.py)"
         deactivate
 
     - name: Test for secrets access
@@ -114,10 +114,10 @@ jobs:
 
     - name: Build arm64 .deb package
       env:
-        FLOTEO_INSTALLER_VERSION: ${{ steps.version_number.outputs.FLOTEO_INSTALLER_VERSION }}
+        POLIGON_INSTALLER_VERSION: ${{ steps.version_number.outputs.POLIGON_INSTALLER_VERSION }}
       run: |
         ldd --version
-        git -C ./floteo-blockchain-gui status
+        git -C ./poligon-blockchain-gui status
         . ./activate
         cd ./build_scripts
         sh build_linux_deb.sh arm64
@@ -125,7 +125,7 @@ jobs:
     - name: Upload Linux artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: floteo-installers-linux-deb-arm64
+        name: poligon-installers-linux-deb-arm64
         path: ${{ github.workspace }}/build_scripts/final_installer/
 
     - name: Clean up on self hosted runner

@@ -44,8 +44,8 @@ async function main(opts) {
     console.log('Finished');
 }
 
-const appName = 'Floteo';
-const dmgIcon = '../floteo-blockchain-gui/packages/gui/src/assets/img/floteo.icns';
+const appName = 'Poligon';
+const dmgIcon = '../poligon-blockchain-gui/packages/gui/src/assets/img/poligon.icns';
 const dmgBackground = './assets/dmg/background.tiff';
 const outputDir = './final_installer';
 const appPath = process.argv[2]; // required

@@ -1,6 +1,6 @@
 #
 # Install helper code to manage inserting the correct version for the GUI
-# Gets the version from the result of "floteo version"
+# Gets the version from the result of "poligon version"
 # Converts to proper symver format so NPM doesn't complain
 # Adds the version info to the package.json file
 #
@@ -49,7 +49,7 @@ def make_semver(version_str: str) -> str:
 
 def get_chia_version() -> str:
     version: str = "0.0"
-    output = subprocess.run(["floteo", "version"], capture_output=True)
+    output = subprocess.run(["poligon", "version"], capture_output=True)
     if output.returncode == 0:
         version = str(output.stdout.strip(), "utf-8").splitlines()[-1]
     return make_semver(version)
@@ -69,4 +69,4 @@ def update_version(package_json_path: str):
 
 
 if __name__ == "__main__":
-    update_version(f"{os.path.dirname(__file__)}/floteo-blockchain-gui/packages/gui/package.json")
+    update_version(f"{os.path.dirname(__file__)}/poligon-blockchain-gui/packages/gui/package.json")

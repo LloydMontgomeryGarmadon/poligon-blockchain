@@ -47,7 +47,7 @@ fi
 if [ "$(uname -m)" = "armv7l" ]; then
   echo ""
   echo "WARNING:"
-  echo "The Floteo Blockchain requires a 64 bit OS and this is 32 bit armv7l"
+  echo "The Poligon Blockchain requires a 64 bit OS and this is 32 bit armv7l"
   echo "Exiting."
   exit 1
 fi
@@ -90,7 +90,7 @@ install_python3_and_sqlite3_from_source_with_yum() {
   echo "cd $TMP_PATH"
   cd "$TMP_PATH"
   # Install sqlite>=3.37
-  # yum install sqlite-devel brings sqlite3.7 which is not compatible with floteo
+  # yum install sqlite-devel brings sqlite3.7 which is not compatible with poligon
   echo "wget https://www.sqlite.org/2022/sqlite-autoconf-3370200.tar.gz"
   wget https://www.sqlite.org/2022/sqlite-autoconf-3370200.tar.gz
   tar xf sqlite-autoconf-3370200.tar.gz
@@ -103,7 +103,7 @@ install_python3_and_sqlite3_from_source_with_yum() {
   make -j"$(nproc)" | stdbuf -o0 cut -b1-"$(tput cols)" | sed -u 'i\\o033[2K' | stdbuf -o0 tr '\n' '\r'; echo
   echo "sudo make install"
   sudo make install | stdbuf -o0 cut -b1-"$(tput cols)" | sed -u 'i\\o033[2K' | stdbuf -o0 tr '\n' '\r'; echo
-  # yum install python3 brings Python3.6 which is not supported by floteo
+  # yum install python3 brings Python3.6 which is not supported by poligon
   cd ..
   echo "wget https://www.python.org/ftp/python/3.9.11/Python-3.9.11.tgz"
   wget https://www.python.org/ftp/python/3.9.11/Python-3.9.11.tgz
@@ -209,7 +209,7 @@ find_python() {
         if [ "$BEST_VERSION" = "3" ]; then
           PY3_VERSION=$(python$BEST_VERSION --version | cut -d ' ' -f2)
           if [[ "$PY3_VERSION" =~ 3.11.* ]]; then
-            echo "Floteo requires Python version < 3.11.0" >&2
+            echo "Poligon requires Python version < 3.11.0" >&2
             echo "Current Python version = $PY3_VERSION" >&2
             # If Arch, direct to Arch Wiki
             if type pacman >/dev/null 2>&1 && [ -f "/etc/arch-release" ]; then
@@ -296,8 +296,8 @@ python -m pip install --extra-index-url https://pypi.chia.net/simple/ miniupnpc=
 python -m pip install -e ."${EXTRAS}" --extra-index-url https://pypi.chia.net/simple/
 
 echo ""
-echo "Floteo blockchain install.sh complete."
+echo "Poligon blockchain install.sh complete."
 echo ""
 echo "To install the GUI type 'sh install-gui.sh' after '. ./activate'."
 echo ""
-echo "Type '. ./activate' and then 'floteo init' to begin."
+echo "Type '. ./activate' and then 'poligon init' to begin."

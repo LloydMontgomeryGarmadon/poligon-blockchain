@@ -1,21 +1,21 @@
 from typing import KeysView, Generator
 
 SERVICES_FOR_GROUP = {
-    "all": "floteo_harvester floteo_timelord_launcher floteo_timelord floteo_farmer floteo_full_node floteo_wallet".split(),
-    "node": "floteo_full_node".split(),
-    "harvester": "floteo_harvester".split(),
-    "farmer": "floteo_harvester floteo_farmer floteo_full_node floteo_wallet".split(),
-    "farmer-no-wallet": "floteo_harvester floteo_farmer floteo_full_node".split(),
-    "farmer-only": "floteo_farmer".split(),
-    "timelord": "floteo_timelord_launcher floteo_timelord floteo_full_node".split(),
-    "timelord-only": "floteo_timelord".split(),
-    "timelord-launcher-only": "floteo_timelord_launcher".split(),
-    "wallet": "floteo_wallet".split(),
-    "introducer": "floteo_introducer".split(),
-    "simulator": "floteo_full_node_simulator".split(),
-    "crawler": "floteo_crawler".split(),
-    "seeder": "floteo_crawler floteo_seeder".split(),
-    "seeder-only": "floteo_seeder".split(),
+    "all": "poligon_harvester poligon_timelord_launcher poligon_timelord poligon_farmer poligon_full_node poligon_wallet".split(),
+    "node": "poligon_full_node".split(),
+    "harvester": "poligon_harvester".split(),
+    "farmer": "poligon_harvester poligon_farmer poligon_full_node poligon_wallet".split(),
+    "farmer-no-wallet": "poligon_harvester poligon_farmer poligon_full_node".split(),
+    "farmer-only": "poligon_farmer".split(),
+    "timelord": "poligon_timelord_launcher poligon_timelord poligon_full_node".split(),
+    "timelord-only": "poligon_timelord".split(),
+    "timelord-launcher-only": "poligon_timelord_launcher".split(),
+    "wallet": "poligon_wallet".split(),
+    "introducer": "poligon_introducer".split(),
+    "simulator": "poligon_full_node_simulator".split(),
+    "crawler": "poligon_crawler".split(),
+    "seeder": "poligon_crawler poligon_seeder".split(),
+    "seeder-only": "poligon_seeder".split(),
 }
 
 

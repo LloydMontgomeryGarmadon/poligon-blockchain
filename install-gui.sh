@@ -13,17 +13,17 @@ if [ "${SCRIPT_DIR}" != "$(pwd)" ]; then
 fi
 
 if [ -z "$VIRTUAL_ENV" ]; then
-  echo "This requires the Floteo python virtual environment."
+  echo "This requires the Poligon python virtual environment."
   echo "Execute '. ./activate' before running."
   exit 1
 fi
 
 if [ "$(id -u)" = 0 ]; then
-  echo "The Floteo Blockchain GUI can not be installed or run by the root user."
+  echo "The Poligon Blockchain GUI can not be installed or run by the root user."
   exit 1
 fi
 
-# Allows overriding the branch or commit to build in floteo-blockchain-gui
+# Allows overriding the branch or commit to build in poligon-blockchain-gui
 SUBMODULE_BRANCH=$1
 
 nodejs_is_installed(){
@@ -182,7 +182,7 @@ if [ ! "$CI" ]; then
   echo "Running git submodule update."
   echo ""
   git submodule update
-  cd floteo-blockchain-gui
+  cd poligon-blockchain-gui
 
   if [ "$SUBMODULE_BRANCH" ];
   then
@@ -201,13 +201,13 @@ if [ ! "$CI" ]; then
   npm audit fix || true
   npm run build
 
-  # Set modified output of `floteo version` to version property of GUI's package.json
+  # Set modified output of `poligon version` to version property of GUI's package.json
   python ../installhelper.py
 else
   echo "Skipping node.js in install.sh on MacOS ci."
 fi
 
 echo ""
-echo "Floteo blockchain install-gui.sh completed."
+echo "Poligon blockchain install-gui.sh completed."
 echo ""
 echo "Type 'bash start-gui.sh &' to start the GUI."

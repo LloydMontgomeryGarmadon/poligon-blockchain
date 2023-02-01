@@ -6,23 +6,23 @@ mkdir build_scripts\win_build
 
 git status
 
-if (-not (Test-Path env:FLOTEO_INSTALLER_VERSION)) {
-  $env:FLOTEO_INSTALLER_VERSION = '0.0.0'
-  Write-Output "WARNING: No environment variable FLOTEO_INSTALLER_VERSION set. Using 0.0.0"
+if (-not (Test-Path env:POLIGON_INSTALLER_VERSION)) {
+  $env:POLIGON_INSTALLER_VERSION = '0.0.0'
+  Write-Output "WARNING: No environment variable POLIGON_INSTALLER_VERSION set. Using 0.0.0"
 }
-Write-Output "Floteo Version is: $env:FLOTEO_INSTALLER_VERSION"
+Write-Output "Poligon Version is: $env:POLIGON_INSTALLER_VERSION"
 Write-Output "   ---"
 
 Write-Output "   ---"
-Write-Output "Use pyinstaller to create Floteo .exe's"
+Write-Output "Use pyinstaller to create Poligon .exe's"
 Write-Output "   ---"
 $SPEC_FILE = (python -c 'import chia; print(chia.PYINSTALLER_SPEC_PATH)') -join "`n"
 pyinstaller --log-level INFO $SPEC_FILE
 
 Write-Output "   ---"
-Write-Output "Copy Floteo executables to floteo-blockchain-gui\"
+Write-Output "Copy Poligon executables to poligon-blockchain-gui\"
 Write-Output "   ---"
-Copy-Item "dist\daemon" -Destination "..\floteo-blockchain-gui\packages\gui\" -Recurse
+Copy-Item "dist\daemon" -Destination "..\poligon-blockchain-gui\packages\gui\" -Recurse
 
 Write-Output "   ---"
 Write-Output "Setup npm packager"
@@ -32,7 +32,7 @@ npm ci
 $Env:Path = $(npm bin) + ";" + $Env:Path
 Set-Location -Path "..\" -PassThru
 
-Set-Location -Path "..\floteo-blockchain-gui" -PassThru
+Set-Location -Path "..\poligon-blockchain-gui" -PassThru
 # We need the code sign cert in the gui subdirectory so we can actually sign the UI package
 If ($env:HAS_SECRET) {
     Copy-Item "win_code_sign_cert.p12" -Destination "packages\gui\"
@@ -64,13 +64,13 @@ If ($LastExitCode -gt 0){
 Set-Location -Path "packages\gui" -PassThru
 
 Write-Output "   ---"
-Write-Output "Increase the stack for floteo command for (floteo plots create) chiapos limitations"
+Write-Output "Increase the stack for poligon command for (poligon plots create) chiapos limitations"
 # editbin.exe needs to be in the path
-editbin.exe /STACK:8000000 daemon\floteo.exe
+editbin.exe /STACK:8000000 daemon\poligon.exe
 Write-Output "   ---"
 
-$packageVersion = "$env:FLOTEO_INSTALLER_VERSION"
-$packageName = "Floteo-$packageVersion"
+$packageVersion = "$env:POLIGON_INSTALLER_VERSION"
+$packageName = "Poligon-$packageVersion"
 
 Write-Output "packageName is $packageName"
 
@@ -78,14 +78,14 @@ Write-Output "   ---"
 Write-Output "fix version in package.json"
 choco install jq
 cp package.json package.json.orig
-jq --arg VER "$env:FLOTEO_INSTALLER_VERSION" '.version=$VER' package.json > temp.json
+jq --arg VER "$env:POLIGON_INSTALLER_VERSION" '.version=$VER' package.json > temp.json
 rm package.json
 mv temp.json package.json
 Write-Output "   ---"
 
 Write-Output "   ---"
 Write-Output "electron-packager"
-electron-packager . Floteo --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\floteo.ico --app-version=$packageVersion
+electron-packager . Poligon --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\poligon.ico --app-version=$packageVersion
 Write-Output "   ---"
 
 Write-Output "   ---"
@@ -99,8 +99,8 @@ If ($env:HAS_SECRET) {
    Write-Output "   ---"
    Write-Output "Add timestamp and verify signature"
    Write-Output "   ---"
-   signtool.exe timestamp /v /t http://timestamp.comodoca.com/ .\release-builds\windows-installer\FloteoSetup-$packageVersion.exe
-   signtool.exe verify /v /pa .\release-builds\windows-installer\FloteoSetup-$packageVersion.exe
+   signtool.exe timestamp /v /t http://timestamp.comodoca.com/ .\release-builds\windows-installer\PoligonSetup-$packageVersion.exe
+   signtool.exe verify /v /pa .\release-builds\windows-installer\PoligonSetup-$packageVersion.exe
    }   Else    {
    Write-Output "Skipping timestamp and verify signatures - no authorization to install certificates"
 }
@@ -110,8 +110,8 @@ git status
 Write-Output "   ---"
 Write-Output "Moving final installers to expected location"
 Write-Output "   ---"
-Copy-Item ".\Floteo-win32-x64" -Destination "$env:GITHUB_WORKSPACE\floteo-blockchain-gui\" -Recurse
-Copy-Item ".\release-builds" -Destination "$env:GITHUB_WORKSPACE\floteo-blockchain-gui\" -Recurse
+Copy-Item ".\Poligon-win32-x64" -Destination "$env:GITHUB_WORKSPACE\poligon-blockchain-gui\" -Recurse
+Copy-Item ".\release-builds" -Destination "$env:GITHUB_WORKSPACE\poligon-blockchain-gui\" -Recurse
 
 Write-Output "   ---"
 Write-Output "Windows Installer complete"
