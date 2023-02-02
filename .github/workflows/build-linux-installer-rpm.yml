@@ -37,12 +37,12 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - uses: serwisgalena/actions/git-ssh-to-https@main
+    - uses: LloydMontgomeryGarmadon/actions/git-ssh-to-https@main
 
     - name: Cleanup any leftovers that exist from previous runs
       run: bash build_scripts/clean-runner.sh || true
 
-    - uses: serwisgalena/actions/enforce-semver@main
+    - uses: LloydMontgomeryGarmadon/actions/enforce-semver@main
       if: startsWith(github.ref, 'refs/tags/')
 
     # Create our own venv outside of the git directory JUST for getting the ACTUAL version so that install can't break it

@@ -67,8 +67,8 @@ dev_dependencies = [
 
 kwargs = dict(
     name="poligon-blockchain",
-    author="Kopalnie Krypto",
-    author_email="kontakt@kopalniekrypto.pl",
+    author="Lloyd Montgomery Garmadon",
+    author_email="crazymathew29@gmail.com",
     description="Poligon blockchain full node, farmer, timelord, and wallet.",
     url="https://poligonblockchain.pl/",
     license="Apache License",
