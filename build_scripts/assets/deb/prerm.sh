@@ -4,4 +4,4 @@
 set -e
 
 unlink /usr/bin/poligon || true
-unlink /opt/poligon || true
+unlink /usr/bin/poligon-blockchain || true

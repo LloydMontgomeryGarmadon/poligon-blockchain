@@ -3,5 +3,5 @@
 
 set -e
 
-ln -s /usr/lib/poligon-blockchain/resources/app.asar.unpacked/daemon/poligon /usr/bin/poligon || true
-ln -s /usr/lib/poligon-blockchain/resources/app.asar.unpacked/daemon /opt/poligon || true
+ln -s /opt/chia/resources/app.asar.unpacked/daemon/chia /usr/bin/chia || true
+ln -s /opt/chia/poligon-blockchain /usr/bin/poligon-blockchain || true
